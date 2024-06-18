@@ -2,11 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/select"
-        android:title="Select_all_notes" />
+        android:title="Select all notes" />
     <item android:id="@+id/imports"
-        android:title="Import_text_files" />
+        android:title="Import text files" />
     <item android:id="@+id/export"
-        android:title="Export_notes_to_text_files" />
-    <item android:id="@+id/add_note"
-        android:title="Add_note"/>
+        android:title="Export notes to text files" />
 </menu>

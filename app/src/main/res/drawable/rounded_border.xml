@@ -1,0 +1,22 @@
+<!-- bordered_gradient_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background shape with gradient -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="@color/white"
+                android:endColor="@color/graylight"
+                android:angle="80" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    <!-- Border shape with multiple colors -->
+    <item>
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="1dp"
+                android:color="@color/gray" /> <!-- First color for border -->
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+</layer-list>

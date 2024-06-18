@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/redo"
+        android:title="Redo" />
+    <item android:id="@+id/undo"
+        android:title="Undo all" />
+    <item android:id="@+id/share"
+        android:title="Share" />
+    <item android:id="@+id/delete"
+        android:title="Delete"/>
+    <item android:id="@+id/search"
+        android:title="Search" />
+    <item android:id="@+id/exportTextFile"
+        android:title="Export to a text files" />
+    <item android:id="@+id/category"
+        android:title="Categorize" />
+    <item android:id="@+id/colorize"
+        android:title="Colorize"/>
+    <item android:id="@+id/switchReadMode"
+        android:title="Switch to read mode" />
+    <item android:id="@+id/print"
+        android:title="Print" />
+    <item android:id="@+id/showFormatBar"
+        android:title="Show formatting bar" />
+    <item android:id="@+id/info"
+        android:title="Show info"/>
+</menu>

@@ -6,48 +6,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UpdateNoteActivity"
-    android:padding="16dp">
+    android:background="@color/graylight">
 
-    <TextView
-        android:id="@+id/addNoteHeading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="16dp"
-        android:text = "Update"
-        android:textColor="@color/orange"
-        android:textSize="24sp"/>
-
-    <ImageView
-        android:id="@+id/updateSaveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/baseline_done_24"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/addNoteHeading"
-        android:layout_marginEnd="6dp"/>
-
-    <EditText
-        android:id="@+id/updateTitleEditText"
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:hint="@string/enter_the_title"
-        android:padding="12dp"
-        android:textSize="20sp"
-        android:layout_below="@+id/addNoteHeading"
-        android:background="@drawable/orange_border"
-        android:layout_marginTop="16dp"
-        android:maxLines="1"/>
+        android:layout_height="50dp"
+        android:id="@+id/toolbarUpdate"
+        android:background="@color/gray"
+        android:elevation="4dp"
+        app:titleTextColor="@color/white"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <EditText
-        android:id="@+id/updateContentEditText"
+        <TextView
+            android:id="@+id/btnUndo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="false"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end"
+            android:text="UNDO"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/updateSaveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="false"
+            android:layout_marginEnd="20dp"
+            android:layout_gravity="end"
+            android:text="SAVE"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="@string/enter_the_description"
-        android:gravity="top"
-        android:padding="12dp"
-        android:textSize="18sp"
-        android:background="@drawable/orange_border"
-        android:layout_below="@id/updateTitleEditText"
-        android:layout_marginTop="12dp"/>
+        android:layout_below="@+id/toolbarUpdate"
+        android:orientation="vertical"
+        android:background="@drawable/border"
+        android:layout_margin="5dp">
+        <EditText
+            android:id="@+id/updateTitleEditText"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="@string/enter_the_title"
+            android:textSize="20sp"
+            android:maxLines="1"/>
+
+        <EditText
+            android:id="@+id/updateContentEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/enter_the_description"
+            android:gravity="top"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
 </RelativeLayout>
