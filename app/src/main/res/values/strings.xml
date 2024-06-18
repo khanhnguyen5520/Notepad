@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">Notepad</string>
+    <string name="app_name">Notepad Free</string>
     <string name="add_note">Add Note.</string>
     <string name="enter_the_title">Enter the title</string>
     <string name="enter_the_description">Enter the description</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 </resources>

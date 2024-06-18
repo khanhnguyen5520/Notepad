@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group>
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/baseline_note_24"
+            android:title="Notes"/>
+    </group>
+
+    <item android:title="Categories">
+        <menu>
+            <item
+                android:id="@+id/nav_edit"
+                android:icon="@drawable/baseline_edit_24"
+                android:title="Edit Categories"/>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/nav_backup"
+        android:icon="@drawable/baseline_backup_24"
+        android:title="Backup"/>
+
+    <item
+        android:id="@+id/nav_trash"
+        android:icon="@drawable/baseline_trash_24"
+        android:title="Trash"/>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/baseline_settings_24"
+            android:title="Setting"/>
+        <item
+            android:id="@+id/nav_ads"
+            android:icon="@drawable/baseline_turn_off_24"
+            android:title="Turn off ads"/>
+        <item
+            android:id="@+id/nav_rate"
+            android:icon="@drawable/baseline_rate_24"
+            android:title="Rate the app"/>
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/baseline_help_24"
+            android:title="Help"/>
+        <item
+            android:id="@+id/nav_privacy"
+            android:icon="@drawable/baseline_policy_24"
+            android:title="Privacy policy"/>
+    </group>
+</menu>

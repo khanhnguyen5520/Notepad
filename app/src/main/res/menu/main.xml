@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/select"
+        android:title="Select_all_notes" />
+    <item android:id="@+id/imports"
+        android:title="Import_text_files" />
+    <item android:id="@+id/export"
+        android:title="Export_notes_to_text_files" />
+    <item android:id="@+id/add_note"
+        android:title="Add_note"/>
+</menu>
