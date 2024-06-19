@@ -1,14 +1,23 @@
 package com.example.notepad
 
-import android.app.AlertDialog
-import android.content.DialogInterface
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notepad.databinding.ActivityMainBinding
@@ -18,6 +27,9 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.InputStreamReader
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -100,7 +112,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true
             }
             R.id.imports -> {
-                // Handle Option 2 click
+                var import = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                import.setType("*/*")
+                import = Intent.createChooser(import, "Choose a file")
+                sActivityResultLauncher.launch(import)
                 true
             }
             R.id.export -> {
@@ -109,5 +124,70 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private val sActivityResultLauncher = registerForActivityResult(
+        StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data!!
+            readFromUri(uri)
+        }
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when(requestCode){
+            10 -> {
+                if(resultCode == RESULT_OK){
+                    val path = data?.data?.path
+                    binding.tvPath.text = path
+                }
+                true
+            }
+            else -> false
+        }
+    }
+
+    private fun readFromUri(uri: Uri) {
+        val `in` = contentResolver.openInputStream(uri)
+        val r = BufferedReader(InputStreamReader(`in`))
+        val total = java.lang.StringBuilder()
+        var line: String?
+        try {
+            while ((r.readLine().also { line = it }) != null) {
+                total.append(line).append('\n')
+            }
+        } catch (_: Exception) {
+        }
+        val title = getFileName(uri,applicationContext)
+        val content = total.toString()
+        val note = Note(5,title!!,content)
+        db.insertNote(note)
+        finish()
+        Toast.makeText(this,"Imported", Toast.LENGTH_SHORT).show()
+    }
+    @SuppressLint("Range")
+    fun getFileName(uri: Uri, context: Context): String? {
+        var res: String? = null
+        if (uri.scheme.equals("content")) {
+            val cursor = context.contentResolver.query(uri, null, null, null, null)
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    res = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                }
+            } finally {
+                cursor!!.close()
+            }
+            if (res == null) {
+
+                res = uri.path
+                val cutt = res?.lastIndexOf("/")
+                if (cutt != -1) {
+                    res = res?.substring(cutt!! + 1)
+                }
+            }
+        }
+        return res
     }
 }

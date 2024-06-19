@@ -3,5 +3,14 @@
     <style name="Base.Theme.Notepad" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryVariant">@color/orange</item>
+        <item name="android:statusBarColor">@color/orange</item>
+        <item name="android:itemTextAppearance">@style/ChangeTextColor</item>
+    </style>
+
+    <style name="Theme.Notepad" parent="Base.Theme.Notepad" />
+    <style name="ChangeTextColor" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

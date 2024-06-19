@@ -59,6 +59,15 @@
             app:cornerRadius="28dp"
             android:backgroundTint="@color/gray"
             />
+        <TextView
+            android:id="@+id/tvPath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/addBtn"
+            android:gravity="bottom"
+            android:layout_alignBottom="@id/addBtn"
+            />
+
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
