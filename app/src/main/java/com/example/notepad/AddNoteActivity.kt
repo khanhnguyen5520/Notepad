@@ -35,9 +35,9 @@ class AddNoteActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
        return when(item.itemId){
             android.R.id.home -> {
-                onBackPressed()  // Handle the back button click
+                onBackPressed()
                 return true
             }else -> super.onOptionsItemSelected(item)
-        }
+       }
     }
 }

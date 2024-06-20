@@ -81,19 +81,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
 
-            R.id.nav_edit -> Toast.makeText(this,"Edit",Toast.LENGTH_SHORT).show()
-            R.id.nav_backup -> Toast.makeText(this,"Backup",Toast.LENGTH_SHORT).show()
-            R.id.nav_trash -> Toast.makeText(this,"Trash",Toast.LENGTH_SHORT).show()
-            R.id.nav_setting -> Toast.makeText(this,"Setting",Toast.LENGTH_SHORT).show()
-            R.id.nav_ads -> Toast.makeText(this,"Ads",Toast.LENGTH_SHORT).show()
-            R.id.nav_rate -> Toast.makeText(this,"Rate",Toast.LENGTH_SHORT).show()
-            R.id.nav_help -> Toast.makeText(this,"Help",Toast.LENGTH_SHORT).show()
-            R.id.nav_privacy -> Toast.makeText(this,"Policy",Toast.LENGTH_SHORT).show()
+        return when(item.itemId){
+
+            R.id.nav_edit -> {
+                Toast.makeText(this, "Edit", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.nav_backup -> {
+                Toast.makeText(this, "Backup", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.nav_trash -> {
+                Toast.makeText(this, "Trash", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.nav_setting -> {
+                startActivity(Intent(this,SettingActivity::class.java))
+                true
+            }
+            R.id.nav_ads -> {
+                Toast.makeText(this, "Ads", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.nav_rate -> {
+                Toast.makeText(this, "Rate", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.nav_help -> {
+                startActivity(Intent(this,HelpActivity::class.java))
+                true
+            }
+            R.id.nav_privacy -> {
+                startActivity(Intent(this,PrivacyActivity::class.java))
+                true
+            }
+            else -> false
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
-        return true
     }
 
     override fun onBackPressed() {

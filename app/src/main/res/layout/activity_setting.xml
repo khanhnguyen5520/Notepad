@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingActivity"
+    android:orientation="vertical"
+    android:backgroundTint="@color/graylight">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbSetting"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/gray"
+        android:elevation="4dp"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="Settings"
+        app:titleTextColor="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:background="@color/graylight">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/tvTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Theme"
+                android:textSize="18dp"/>
+
+            <TextView
+                android:id="@+id/tvThemeDes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Changes color theme of visible elements"
+                android:textSize="15dp"
+                android:textColor="#aba6a4"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Password settings"
+            android:textSize="18dp"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/tvNotelist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Note list"
+            android:textSize="18dp"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/tcNoteEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Note editing"
+            android:textSize="18dp"
+            android:layout_marginBottom="20dp"/>
+
+        <LinearLayout
+            android:id="@+id/lMove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="5"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="4">
+
+                <TextView
+                    android:id="@+id/tvMove"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Move deleted notes to 'Trash'"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/tvMoveDes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Deleted notes will be stored in the 'Trash'' folder"
+                    android:textSize="15dp"
+                    android:textColor="#aba6a4"/>
+
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/swMove"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                tools:ignore="UseSwitchCompatOrMaterialXml"
+                android:shadowColor="@color/graylight"
+                android:thumbTint="@color/gray"
+                android:trackTint="#b09b7f"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lAttach"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="5"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="4">
+
+                <TextView
+                    android:id="@+id/tvAttach"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Attach diagnostic info"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/tvAttachDes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Diagnostic info will be attached to e-mail messages"
+                    android:textSize="15dp"
+                    android:textColor="#aba6a4"/>
+
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/swAttach"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                tools:ignore="UseSwitchCompatOrMaterialXml"
+                android:thumbTint="@color/gray"
+                android:trackTint="#b09b7f"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lHide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="5"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="4">
+
+                <TextView
+                    android:id="@+id/tvHide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hide note titles in diagnostic log"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/tvHideDes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hides note titles in diagnostic info before sending it to the technical support"
+                    android:textSize="15dp"
+                    android:textColor="#aba6a4"/>
+
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/swHide"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                tools:ignore="UseSwitchCompatOrMaterialXml"
+                android:thumbTint="@color/gray"
+                android:trackTint="#b09b7f"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lBackup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="5"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="4">
+
+                <TextView
+                    android:id="@+id/tvBackup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Use the device's backup"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/tvBackupDes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="The device can save notes in its backup copy. Importtant: please read the 'Help' section to get more information"
+                    android:textSize="15dp"
+                    android:textColor="#aba6a4"/>
+
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/swBackup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                tools:ignore="UseSwitchCompatOrMaterialXml"
+                android:thumbTint="@color/gray"
+                android:trackTint="#b09b7f"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvPrivacy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Privacy settings"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
