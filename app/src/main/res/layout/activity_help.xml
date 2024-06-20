@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HelpActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/graylight">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tbHelp"
@@ -17,6 +18,33 @@
         android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:title="Settings"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/white"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notepad"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:textSize="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="15dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Frequently asked questions"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:textSize="20dp"
+        android:layout_marginBottom="10dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/parentRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </LinearLayout>

@@ -4,11 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.view.Menu
 import android.view.MenuItem
@@ -16,8 +13,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notepad.databinding.ActivityMainBinding
@@ -31,6 +26,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 
+@Suppress("UNREACHABLE_CODE", "DEPRECATION")
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
@@ -121,6 +117,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.drawerLayout.closeDrawer(GravityCompat.START)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -160,17 +157,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    @SuppressLint("MissingSuperCall")
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
             10 -> {
                 if(resultCode == RESULT_OK){
                     val path = data?.data?.path
                     binding.tvPath.text = path
                 }
-                true
             }
-            else -> false
         }
     }
 
