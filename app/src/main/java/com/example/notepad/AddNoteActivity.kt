@@ -5,6 +5,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.notepad.databinding.ActivityAddNoteBinding
+import com.example.notepad.model.Note
 
 class AddNoteActivity : AppCompatActivity() {
 
@@ -23,8 +24,11 @@ class AddNoteActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.saveButton.setOnClickListener {
-            val title = binding.edtTitle.text.toString()
+            var title = binding.edtTitle.text.toString()
             val content = binding.edtContent.text.toString()
+            if(title.isEmpty()){
+                title = "Untitled"
+            }
             val note = Note(0, title,content)
             db.insertNote(note)
             finish()

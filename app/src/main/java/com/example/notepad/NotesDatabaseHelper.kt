@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.notepad.model.Note
 
 class NotesDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,null, DATABASE_VERSION) {
 
@@ -68,7 +69,7 @@ class NotesDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         db.close()
     }
 
-    fun getNoteByID(noteId : Int): Note{
+    fun getNoteByID(noteId : Int): Note {
         val db = readableDatabase
         val query ="SELECT * FROM $TABLE_NAME WHERE $COLUMN_ID = $noteId"
         val cursor = db.rawQuery(query,null)

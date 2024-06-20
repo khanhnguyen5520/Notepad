@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.notepad.model.Note
 
 class NotesAdapter(private var notes: List<Note>, context: Context) :
     RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {

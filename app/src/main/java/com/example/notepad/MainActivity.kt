@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notepad.databinding.ActivityMainBinding
+import com.example.notepad.model.Note
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationView
@@ -148,15 +149,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private val sActivityResultLauncher = registerForActivityResult(
-        StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val uri = result.data?.data!!
-            readFromUri(uri)
-        }
-    }
-
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -170,26 +162,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun readFromUri(uri: Uri) {
-        val `in` = contentResolver.openInputStream(uri)
-        val r = BufferedReader(InputStreamReader(`in`))
-        val total = java.lang.StringBuilder()
-        var line: String?
-        try {
-            while ((r.readLine().also { line = it }) != null) {
-                total.append(line).append('\n')
-            }
-        } catch (_: Exception) {
+    private val sActivityResultLauncher = registerForActivityResult(
+        StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data!!
+            readFromUri(uri)
         }
-        val title = getFileName(uri,applicationContext)
-        val content = total.toString()
-        val note = Note(5,title!!,content)
-        db.insertNote(note)
-        finish()
-        Toast.makeText(this,"Imported", Toast.LENGTH_SHORT).show()
     }
+
     @SuppressLint("Range")
-    fun getFileName(uri: Uri, context: Context): String? {
+    private fun getFileName(uri: Uri, context: Context): String? {
         var res: String? = null
         if (uri.scheme.equals("content")) {
             val cursor = context.contentResolver.query(uri, null, null, null, null)
@@ -201,14 +184,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 cursor!!.close()
             }
             if (res == null) {
-
                 res = uri.path
-                val cutt = res?.lastIndexOf("/")
-                if (cutt != -1) {
-                    res = res?.substring(cutt!! + 1)
+                val cut = res?.lastIndexOf("/")
+                if (cut != -1) {
+                    res = res?.substring(cut!! + 1)
                 }
             }
         }
         return res
     }
+
+    private fun readFromUri(uri: Uri) {
+
+        val `in` = contentResolver.openInputStream(uri)
+        val r = BufferedReader(InputStreamReader(`in`))
+        val total = java.lang.StringBuilder()
+        var line: String?
+        try {
+            while ((r.readLine().also { line = it }) != null) {
+                total.append(line).append('\n')
+            }
+        } catch (_: Exception){
+
+        }
+
+        val title = getFileName(uri,applicationContext)
+        val content = total.toString()
+        val note = Note(5,title!!,content)
+        db.insertNote(note)
+        Toast.makeText(this,"Imported", Toast.LENGTH_SHORT).show()
+    }
+
 }
