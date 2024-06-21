@@ -11,7 +11,7 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/toolbarUpdate"
+        android:id="@+id/tbUpdate"
         android:background="@color/gray"
         android:elevation="4dp"
         app:titleTextColor="@color/white"
@@ -44,14 +44,15 @@
 
 
     <LinearLayout
+        android:id="@+id/UpdateNote"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbarUpdate"
+        android:layout_below="@+id/tbUpdate"
         android:orientation="vertical"
         android:background="@drawable/border"
         android:layout_margin="5dp">
         <EditText
-            android:id="@+id/updateTitleEditText"
+            android:id="@+id/edtUpdateTitle"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:hint="@string/enter_the_title"
@@ -59,7 +60,7 @@
             android:maxLines="1"/>
 
         <EditText
-            android:id="@+id/updateContentEditText"
+            android:id="@+id/edtUpdateContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/enter_the_description"

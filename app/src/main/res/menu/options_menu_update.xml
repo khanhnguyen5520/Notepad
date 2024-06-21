@@ -13,7 +13,7 @@
     <item android:id="@+id/exportTextFile"
         android:title="Export to a text files" />
     <item android:id="@+id/category"
-        android:title="Categorize" />
+        android:title="Categorize"/>
     <item android:id="@+id/colorize"
         android:title="Colorize"/>
     <item android:id="@+id/switchReadMode"

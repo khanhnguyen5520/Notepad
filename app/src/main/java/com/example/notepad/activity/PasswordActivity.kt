@@ -54,7 +54,7 @@ class PasswordActivity : AppCompatActivity() {
     fun showPopup(view: View) {
 
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = inflater.inflate(R.layout.popup_layout,null)
+        val popupView = inflater.inflate(R.layout.popup_password,null)
 
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
