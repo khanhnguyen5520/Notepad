@@ -1,13 +1,10 @@
-package com.example.notepad
+package com.example.notepad.activity
 
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.room.InvalidationTracker
+import com.example.notepad.HelpItemAdapter
 import com.example.notepad.databinding.ActivityHelpBinding
 import com.example.notepad.model.HelpItem
 
@@ -47,7 +44,6 @@ class HelpActivity : AppCompatActivity() {
     }
 
     private fun prepareData() {
-
         val childItems1="Con1"
         parentList.add(HelpItem(1,"Expand all answers", childItems1))
         val childItem2 = "Con2"

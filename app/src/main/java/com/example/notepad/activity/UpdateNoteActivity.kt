@@ -1,4 +1,4 @@
-package com.example.notepad
+package com.example.notepad.activity
 
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -8,6 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.notepad.DAO.NotesDatabaseHelper
+import com.example.notepad.R
 import com.example.notepad.databinding.ActivityUpdateNoteBinding
 import com.example.notepad.model.Note
 
@@ -71,7 +73,7 @@ class UpdateNoteActivity : AppCompatActivity() {
                 builder.setMessage("The '${binding.updateTitleEditText.text}' note will be deleted, Are you sure?")
                     .setPositiveButton("Yes") { dialogInterface: DialogInterface, i: Int ->
                         db.deleteNote(noteId)
-                        startActivity(Intent(this,MainActivity::class.java))
+                        startActivity(Intent(this, MainActivity::class.java))
                         Toast.makeText(this,"Deleted",Toast.LENGTH_SHORT).show()
                     }
                     .setNegativeButton("No") { dialogInterface: DialogInterface, i: Int ->

@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingActivity"
+    tools:context=".activity.SettingActivity"
     android:orientation="vertical"
     android:backgroundTint="@color/graylight">
 

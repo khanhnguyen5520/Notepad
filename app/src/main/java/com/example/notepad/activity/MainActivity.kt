@@ -1,4 +1,4 @@
-package com.example.notepad
+package com.example.notepad.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -15,6 +15,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.notepad.DAO.NotesDatabaseHelper
+import com.example.notepad.NotesAdapter
+import com.example.notepad.R
 import com.example.notepad.databinding.ActivityMainBinding
 import com.example.notepad.model.Note
 import com.google.android.gms.ads.AdRequest
@@ -46,11 +49,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.notesRecyclerView.adapter = notesAdapter
 
         binding.addBtn.setOnClickListener{
-            startActivity(Intent(this,AddNoteActivity::class.java))
+            startActivity(Intent(this, AddNoteActivity::class.java))
         }
 
         setSupportActionBar(binding.toolbar)
-        val toggle = ActionBarDrawerToggle(this,binding.drawerLayout,binding.toolbar,R.string.nav_open,R.string.nav_close)
+        val toggle = ActionBarDrawerToggle(this,binding.drawerLayout,binding.toolbar,
+            R.string.nav_open,
+            R.string.nav_close
+        )
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         binding.navigationDrawer.setNavigationItemSelectedListener(this)
@@ -86,7 +92,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true
             }
             R.id.nav_backup -> {
-                Toast.makeText(this, "Backup", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, BackupActivity::class.java))
                 true
             }
             R.id.nav_trash -> {
@@ -94,7 +100,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true
             }
             R.id.nav_setting -> {
-                startActivity(Intent(this,SettingActivity::class.java))
+                startActivity(Intent(this, SettingActivity::class.java))
                 true
             }
             R.id.nav_ads -> {
@@ -105,11 +111,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true
             }
             R.id.nav_help -> {
-                startActivity(Intent(this,HelpActivity::class.java))
+                startActivity(Intent(this, HelpActivity::class.java))
                 true
             }
             R.id.nav_privacy -> {
-                startActivity(Intent(this,PrivacyActivity::class.java))
+                startActivity(Intent(this, PrivacyActivity::class.java))
                 true
             }
             else -> false
@@ -130,7 +136,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.select -> {
-                // Handle Option 1 click
+                notesAdapter.selectAll()
                 true
             }
             R.id.imports -> {

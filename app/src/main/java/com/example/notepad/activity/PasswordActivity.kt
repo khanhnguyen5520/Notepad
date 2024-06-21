@@ -1,4 +1,4 @@
-package com.example.notepad
+package com.example.notepad.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -14,8 +14,7 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
+import com.example.notepad.R
 import com.example.notepad.databinding.ActivityPasswordBinding
 
 

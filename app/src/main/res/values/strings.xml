@@ -6,4 +6,6 @@
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
     <string name="use_app">nefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef</string>
+    <string name="btnSaveBackup">SAVE BACKUP TO A FILE</string>
+    <string name="btnLoadBackup">LOAD NOTES FROM A BACKUP FILE</string>
 </resources>

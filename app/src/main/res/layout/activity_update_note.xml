@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UpdateNoteActivity"
+    tools:context=".activity.UpdateNoteActivity"
     android:background="@color/graylight">
 
     <androidx.appcompat.widget.Toolbar

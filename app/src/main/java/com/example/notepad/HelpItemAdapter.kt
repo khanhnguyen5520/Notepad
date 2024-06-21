@@ -19,7 +19,7 @@ class HelpItemAdapter(private val parentItemList: List<HelpItem>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.parent_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.help_item, parent, false)
         return ItemViewHolder(view)
     }
 
@@ -40,7 +40,6 @@ class HelpItemAdapter(private val parentItemList: List<HelpItem>) :
             notifyItemChanged(position)
         }
     }
-
     private fun isAnyItemExpanded(position: Int) {
 
         val temp = parentItemList.indexOfFirst {

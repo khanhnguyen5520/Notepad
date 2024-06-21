@@ -1,4 +1,4 @@
-package com.example.notepad
+package com.example.notepad.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -20,7 +20,7 @@ class SettingActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.tvPass.setOnClickListener {
-            startActivity(Intent(this,PasswordActivity::class.java))
+            startActivity(Intent(this, PasswordActivity::class.java))
         }
         binding.lMove.setOnClickListener {
             binding.swMove.isChecked = !binding.swMove.isChecked
@@ -35,7 +35,7 @@ class SettingActivity : AppCompatActivity() {
             binding.swBackup.isChecked = !binding.swBackup.isChecked
         }
         binding.tvPrivacy.setOnClickListener {
-            startActivity(Intent(this,PrivacyActivity::class.java))
+            startActivity(Intent(this, PrivacyActivity::class.java))
         }
     }
 

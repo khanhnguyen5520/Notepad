@@ -16,25 +16,28 @@
         android:theme="@style/Theme.Notepad"
         tools:targetApi="31">
         <activity
-            android:name=".HelpActivity"
+            android:name=".activity.BackupActivity"
             android:exported="false" />
         <activity
-            android:name=".PrivacyActivity"
+            android:name=".activity.HelpActivity"
             android:exported="false" />
         <activity
-            android:name=".PasswordActivity"
+            android:name=".activity.PrivacyActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingActivity"
+            android:name=".activity.PasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".UpdateNoteActivity"
+            android:name=".activity.SettingActivity"
             android:exported="false" />
         <activity
-            android:name=".AddNoteActivity"
+            android:name=".activity.UpdateNoteActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.AddNoteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

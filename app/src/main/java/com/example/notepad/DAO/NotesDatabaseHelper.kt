@@ -1,4 +1,4 @@
-package com.example.notepad
+package com.example.notepad.DAO
 
 import android.content.ContentValues
 import android.content.Context

@@ -1,9 +1,10 @@
-package com.example.notepad
+package com.example.notepad.activity
 
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.notepad.DAO.NotesDatabaseHelper
 import com.example.notepad.databinding.ActivityAddNoteBinding
 import com.example.notepad.model.Note
 

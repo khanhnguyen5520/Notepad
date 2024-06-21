@@ -1,12 +1,9 @@
-package com.example.notepad
+package com.example.notepad.activity
 
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.notepad.databinding.ActivityPrivacyBinding
 
 class PrivacyActivity : AppCompatActivity() {
