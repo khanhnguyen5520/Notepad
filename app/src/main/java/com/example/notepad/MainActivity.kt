@@ -212,7 +212,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Toast.makeText(this,"Imported", Toast.LENGTH_SHORT).show()
     }
 
-    fun rateApp(){
+    private fun rateApp(){
         val appPackageName = "com.example.notepad"
 
         val intent = Intent(Intent.ACTION_VIEW).apply {
