@@ -5,5 +5,6 @@
     <color name="orange">#A48861</color>
     <color name="gray">#A48861</color>
     <color name="graylight">#f7f6d0</color>
+    <color name="highlight">#b734eb</color>
 
 </resources>

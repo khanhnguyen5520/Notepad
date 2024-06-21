@@ -6,16 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.notepad.model.Note
 
 class NotesAdapter(private var notes: List<Note>, context: Context) :
     RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
+    private val context: Context = context
 
-    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
         val contentTextView: TextView = itemView.findViewById(R.id.contentTextView)
+
+        init {
+            itemView.setOnLongClickListener {
+                itemView.setBackgroundColor(context.resources.getColor(R.color.highlight))
+                true
+            }
+        }
 
     }
 
@@ -39,6 +49,7 @@ class NotesAdapter(private var notes: List<Note>, context: Context) :
                 putExtra("note_id",note.id)
             }
             holder.itemView.context.startActivity(intent)
+            holder.itemView.setBackgroundColor(context.resources.getColor(R.color.highlight))
         }
 
     }
@@ -46,5 +57,11 @@ class NotesAdapter(private var notes: List<Note>, context: Context) :
     fun refreshData(newNotes: List<Note>){
         notes = newNotes
         notifyDataSetChanged()
+    }
+
+    private fun setMultipleSelection(adapterPosition: Int): Boolean {
+        //notes[adapterPosition].select = !notes[adapterPosition].select
+        notifyDataSetChanged()
+        return true
     }
 }

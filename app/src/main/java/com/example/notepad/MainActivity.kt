@@ -55,12 +55,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
         binding.navigationDrawer.setNavigationItemSelectedListener(this)
 
+        //thêm quảng cáo
         val backgroundScope = CoroutineScope(Dispatchers.IO)
         backgroundScope.launch {
             // Initialize the Google Mobile Ads SDK on a background thread.
             MobileAds.initialize(this@MainActivity) {}
         }
-
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
 
@@ -101,8 +101,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Toast.makeText(this, "Ads", Toast.LENGTH_SHORT).show()
                 true
             }
-            R.id.nav_rate -> {
-                Toast.makeText(this, "Rate", Toast.LENGTH_SHORT).show()
+            R.id.nav_rate -> { rateApp() // chưa public nên sẽ ko tìm thấy
                 true
             }
             R.id.nav_help -> {
@@ -195,7 +194,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun readFromUri(uri: Uri) {
-
         val `in` = contentResolver.openInputStream(uri)
         val r = BufferedReader(InputStreamReader(`in`))
         val total = java.lang.StringBuilder()
@@ -207,7 +205,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } catch (_: Exception){
 
         }
-
         val title = getFileName(uri,applicationContext)
         val content = total.toString()
         val note = Note(5,title!!,content)
@@ -215,4 +212,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Toast.makeText(this,"Imported", Toast.LENGTH_SHORT).show()
     }
 
+    fun rateApp(){
+        val appPackageName = "com.example.notepad"
+
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("market://details?id=$appPackageName")
+            setPackage("com.android.vending") // Play Store app package
+        }
+        try {
+            startActivity(intent)
+        } catch (e: android.content.ActivityNotFoundException) {
+            // nếu chưa cài play store thì sẽ tìm trên web
+            val playStoreUri = Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")
+            val playStoreIntent = Intent(Intent.ACTION_VIEW, playStoreUri)
+            startActivity(playStoreIntent)
+        }
+    }
 }
