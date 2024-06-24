@@ -13,7 +13,7 @@
         android:id="@+id/tbSetting"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/gray"
+        android:background="@color/background"
         android:elevation="4dp"
         android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -111,7 +111,7 @@
                 android:layout_gravity="center_vertical"
                 tools:ignore="UseSwitchCompatOrMaterialXml"
                 android:shadowColor="@color/graylight"
-                android:thumbTint="@color/gray"
+                android:thumbTint="@color/background"
                 android:trackTint="#b09b7f"/>
         </LinearLayout>
 
@@ -152,7 +152,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 tools:ignore="UseSwitchCompatOrMaterialXml"
-                android:thumbTint="@color/gray"
+                android:thumbTint="@color/background"
                 android:trackTint="#b09b7f"/>
         </LinearLayout>
 
@@ -193,7 +193,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 tools:ignore="UseSwitchCompatOrMaterialXml"
-                android:thumbTint="@color/gray"
+                android:thumbTint="@color/background"
                 android:trackTint="#b09b7f"/>
         </LinearLayout>
 
@@ -234,7 +234,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 tools:ignore="UseSwitchCompatOrMaterialXml"
-                android:thumbTint="@color/gray"
+                android:thumbTint="@color/background"
                 android:trackTint="#b09b7f"/>
         </LinearLayout>
 

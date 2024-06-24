@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/tbUpdate"
-        android:background="@color/gray"
+        android:background="@color/background"
         android:elevation="4dp"
         app:titleTextColor="@color/white"
         android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -65,7 +65,9 @@
             android:layout_height="match_parent"
             android:hint="@string/enter_the_description"
             android:gravity="top"
-            android:textSize="18sp"/>
+            android:textSize="18sp">
+            <requestFocus />
+        </EditText>
     </LinearLayout>
 
 </RelativeLayout>

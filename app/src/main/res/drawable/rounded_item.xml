@@ -15,7 +15,7 @@
         <shape android:shape="rectangle">
             <stroke
                 android:width="1dp"
-                android:color="@color/gray" /> <!-- First color for border -->
+                android:color="@color/background" /> <!-- First color for border -->
             <corners android:radius="10dp" />
         </shape>
     </item>

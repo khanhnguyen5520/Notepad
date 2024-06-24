@@ -15,20 +15,24 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.notepad.DAO.NotesDatabaseHelper
 import com.example.notepad.R
-import com.example.notepad.databinding.ActivityUpdateNoteBinding
+import com.example.notepad.databinding.ActivityUpdateBinding
 import com.example.notepad.model.Note
+import yuku.ambilwarna.AmbilWarnaDialog
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
 @Suppress("DEPRECATION")
 class UpdateActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityUpdateNoteBinding
+    private lateinit var binding: ActivityUpdateBinding
     private lateinit var db: NotesDatabaseHelper
     private var noteId: Int = -1
     private lateinit var note: Note
+    private var defaultColor: Int = 0
 
     //get current datetime
     private val time = Calendar.getInstance().time
@@ -40,10 +44,13 @@ class UpdateActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityUpdateNoteBinding.inflate(layoutInflater)
+        binding = ActivityUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         db = NotesDatabaseHelper(this)
+
+        defaultColor = ContextCompat.getColor(this, R.color.background)
+
 
         setSupportActionBar(binding.tbUpdate)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -58,6 +65,7 @@ class UpdateActivity : AppCompatActivity() {
         binding.edtUpdateTitle.setText(note.title)
         binding.edtUpdateContent.setText(note.content)
 
+        //setBackground()
         binding.updateSaveButton.setOnClickListener {
             val newTitle = binding.edtUpdateTitle.text.toString()
             val newContent = binding.edtUpdateContent.text.toString()
@@ -67,6 +75,11 @@ class UpdateActivity : AppCompatActivity() {
             Toast.makeText(this, "Changes Save", Toast.LENGTH_SHORT).show()
         }
     }
+
+//    private fun setBackground() {
+//        binding.main.setBackgroundColor(note.color)
+//        binding.main.setBackgroundColor(note.color)
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -88,10 +101,10 @@ class UpdateActivity : AppCompatActivity() {
 
             R.id.share -> {
                 val intent = Intent(Intent.ACTION_SEND)
-                intent.type="text/plan"
-                intent.putExtra(Intent.EXTRA_SUBJECT,"Subject Here")
-                intent.putExtra(Intent.EXTRA_TEXT,note.content)
-                startActivity(Intent.createChooser(intent,"Share via"))
+                intent.type = "text/plan"
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
+                intent.putExtra(Intent.EXTRA_TEXT, note.content)
+                startActivity(Intent.createChooser(intent, "Share via"))
                 true
             }
 
@@ -117,7 +130,7 @@ class UpdateActivity : AppCompatActivity() {
             }
 
             R.id.exportTextFile -> {
-                // Handle Option 2 click
+                exportFile()
                 true
             }
 
@@ -131,7 +144,7 @@ class UpdateActivity : AppCompatActivity() {
             }
 
             R.id.colorize -> {
-                // Handle Option 2 click
+                openColorPicker()
                 true
             }
 
@@ -147,7 +160,6 @@ class UpdateActivity : AppCompatActivity() {
             }
 
             R.id.showFormatBar -> {
-                // Handle Option 1 click
                 true
             }
 
@@ -163,6 +175,30 @@ class UpdateActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun exportFile() {
+
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.setType("text/plain")
+        intent.putExtra(Intent.EXTRA_TITLE, "${note.title}.txt")
+        startActivityForResult(intent, 1)
+    }
+
+    private fun openColorPicker() {
+        val ambilWarnaDialog =
+            AmbilWarnaDialog(this, defaultColor, object : AmbilWarnaDialog.OnAmbilWarnaListener {
+                override fun onCancel(dialog: AmbilWarnaDialog?) {
+                }
+
+                override fun onOk(dialog: AmbilWarnaDialog?, color: Int) {
+                    defaultColor = color
+                    note.color = defaultColor
+                }
+
+            })
+        ambilWarnaDialog.show()
     }
 
     @SuppressLint("ClickableViewAccessibility", "InflateParams", "SetTextI18n")
@@ -225,6 +261,29 @@ class UpdateActivity : AppCompatActivity() {
         }
         binding.edtUpdateTitle.setOnClickListener {
             Toast.makeText(this, "Tap twice to edit", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                try {
+
+                    val uri = data!!.data
+                    val outputStream = contentResolver.openOutputStream(uri!!)
+                    outputStream?.write(note.content.toByteArray())
+                    outputStream?.close()
+
+                    Toast.makeText(this, "done", Toast.LENGTH_SHORT).show()
+                } catch (e: IOException) {
+                    Toast.makeText(this, "Fail", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "faill no", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

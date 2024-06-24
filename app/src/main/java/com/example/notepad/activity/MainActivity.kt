@@ -219,7 +219,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.export -> {
-                // Handle Option 1 click
                 true
             }
 
@@ -232,8 +231,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+
     @SuppressLint("ClickableViewAccessibility", "InflateParams")
     private fun sortFilter() {
+        searchList.clear()
+        searchList.addAll(noteList)
         val view = layoutInflater.inflate(R.layout.popup_sort, null)
 
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -340,6 +342,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun readFromUri(uri: Uri) {
+
         val `in` = contentResolver.openInputStream(uri)
         val r = BufferedReader(InputStreamReader(`in`))
         val total = java.lang.StringBuilder()

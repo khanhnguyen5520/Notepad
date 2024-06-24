@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/toolbar"
-            android:background="@color/gray"
+            android:background="@color/background"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
 
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/toolbar"
-            android:background="@color/gray"
+            android:background="@color/background"
             android:gravity="center">
 
             <com.google.android.gms.ads.AdView
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 ads:adSize="BANNER"
                 ads:adUnitId="ca-app-pub-3940256099942544/9214589741"
-                android:backgroundTint="@color/gray"/>
+                android:backgroundTint="@color/background"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -60,7 +60,7 @@
             app:tint="@color/white"
             style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
             app:cornerRadius="28dp"
-            android:backgroundTint="@color/gray"
+            android:backgroundTint="@color/background"
             />
 
 
