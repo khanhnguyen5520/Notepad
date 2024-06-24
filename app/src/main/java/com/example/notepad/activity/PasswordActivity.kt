@@ -63,7 +63,6 @@ class PasswordActivity : AppCompatActivity() {
 
         popupWindow.elevation = 20F
 
-
         // show the popup window
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
 

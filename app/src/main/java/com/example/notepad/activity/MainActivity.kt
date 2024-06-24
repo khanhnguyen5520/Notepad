@@ -7,12 +7,21 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.PopupWindow
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notepad.DAO.NotesDatabaseHelper
@@ -28,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.Locale
 
 
 @Suppress("UNREACHABLE_CODE", "DEPRECATION")
@@ -35,7 +45,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var db: NotesDatabaseHelper
-    private lateinit var notesAdapter: NotesAdapter
+    private lateinit var adapter: NotesAdapter
+    private var dataList= ArrayList<Note>()
+    private var searchList= ArrayList<Note>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,38 +55,68 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         db = NotesDatabaseHelper(this)
-        notesAdapter = NotesAdapter(db.getAllNote(),this)
+        dataList= db.getAllNote()
+        getData()
+
+        //searchItem()
+        adapter = NotesAdapter(dataList,this)
         binding.notesRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.notesRecyclerView.adapter = notesAdapter
+        binding.notesRecyclerView.adapter = adapter
 
         binding.addBtn.setOnClickListener{
             startActivity(Intent(this, AddNoteActivity::class.java))
         }
 
         setSupportActionBar(binding.toolbar)
-        val toggle = ActionBarDrawerToggle(this,binding.drawerLayout,binding.toolbar,
-            R.string.nav_open,
-            R.string.nav_close
-        )
+        val toggle = ActionBarDrawerToggle(this,binding.drawerLayout,binding.toolbar, R.string.nav_open, R.string.nav_close)
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         binding.navigationDrawer.setNavigationItemSelectedListener(this)
 
-        //thêm quảng cáo
-        val backgroundScope = CoroutineScope(Dispatchers.IO)
-        backgroundScope.launch {
-            // Initialize the Google Mobile Ads SDK on a background thread.
-            MobileAds.initialize(this@MainActivity) {}
-        }
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
+        //chạy quảng cáo
+        ads()
 
+        //binding.so
+        binding.searchView.setOnQueryTextListener(object : OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                filterList(newText)
+                return true
+            }
+        })
+    }
+
+    private fun filterList(query: String){
+        if (query.isNotEmpty()) {
+            val filteredList = ArrayList<Note>()
+            for (i in dataList) {
+                if (i.title.lowercase(Locale.ROOT).contains(query)) {
+                    filteredList.add(i)
+                }
+            }
+
+            if (filteredList.isEmpty()) {
+                Toast.makeText(this, "No Data found", Toast.LENGTH_SHORT).show()
+            } else {
+                adapter.setFilterList(filteredList)
+            }
+        }
+    }
+
+    private fun getData(){
+        dataList = db.getAllNote()
+        searchList.addAll(dataList)
     }
 
     override fun onResume() {
         super.onResume()
-        notesAdapter.refreshData(db.getAllNote())
+        adapter.refreshData(db.getAllNote())
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -136,7 +178,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.select -> {
-                notesAdapter.selectAll()
+                adapter.selectAll()
                 true
             }
             R.id.imports -> {
@@ -161,15 +203,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             10 -> {
                 if(resultCode == RESULT_OK){
                     val path = data?.data?.path
-                    binding.tvPath.text = path
+                    //binding.tvPath.text = path
                 }
             }
         }
     }
 
-    private val sActivityResultLauncher = registerForActivityResult(
-        StartActivityForResult()
-    ) { result ->
+    private val sActivityResultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val uri = result.data?.data!!
             readFromUri(uri)
@@ -234,4 +274,47 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             startActivity(playStoreIntent)
         }
     }
+
+    private fun ads(){
+        //thêm quảng cáo
+        val backgroundScope = CoroutineScope(Dispatchers.IO)
+        backgroundScope.launch {
+            // Initialize the Google Mobile Ads SDK on a background thread.
+            MobileAds.initialize(this@MainActivity) {}
+        }
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    fun SortPopup(view: View) {
+
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(R.layout.popup_sort,null)
+
+        val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val focusable = true
+        val popupWindow = PopupWindow(popupView, width, height, focusable)
+
+        popupWindow.elevation = 20F
+
+        // show the popup window
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+
+        val v = popupWindow.contentView
+        val btnClose = v.findViewById<TextView>(R.id.btnCancel)
+        val btnOk = v.findViewById<TextView>(R.id.btnOk)
+
+
+        btnClose.setOnTouchListener { _, _ ->
+            popupWindow.dismiss()
+            true
+        }
+
+        btnOk.setOnTouchListener { v, event ->
+            true
+        }
+
+    }
+
 }

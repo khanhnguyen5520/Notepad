@@ -13,7 +13,7 @@ import com.example.notepad.activity.UpdateNoteActivity
 import com.example.notepad.model.MainViewModel
 import com.example.notepad.model.Note
 
-class NotesAdapter(private var notes: List<Note>, context: Context) :
+class NotesAdapter(private var noteList: ArrayList<Note>, context: Context) :
     RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
     var activity: Activity? = null
@@ -42,12 +42,12 @@ class NotesAdapter(private var notes: List<Note>, context: Context) :
     }
 
     override fun getItemCount(): Int {
-        return notes.size
+        return noteList.size
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
 
-        val note = notes[position]
+        val note = noteList[position]
         holder.titleTextView.text = note.title
         holder.contentTextView.text = note.content
 
@@ -56,7 +56,6 @@ class NotesAdapter(private var notes: List<Note>, context: Context) :
                 putExtra("note_id",note.id)
             }
             holder.itemView.context.startActivity(intent)
-
         }
 
 //        holder.itemView.setOnLongClickListener { v ->
@@ -131,7 +130,6 @@ class NotesAdapter(private var notes: List<Note>, context: Context) :
 //        } else {
 //            holder.bgItem.setBackgroundResource(R.drawable.rounded_item)
 //        }
-
     }
 
 //    private fun ClickItem(holder: ViewHolder) {
@@ -145,14 +143,19 @@ class NotesAdapter(private var notes: List<Note>, context: Context) :
 //        }
 //        mainViewModel.setText(selectList!!.size.toString())
 //    }
-    fun refreshData(newNotes: List<Note>){
-        notes = newNotes
+    fun refreshData(newNotes: ArrayList<Note>){
+        noteList = newNotes
         notifyDataSetChanged()
     }
 
     fun selectAll() {
         selected.clear()
-        selected.addAll(notes)
+        selected.addAll(noteList)
+        notifyDataSetChanged()
+    }
+
+    fun setFilterList(noteList: ArrayList<Note>){
+        this.noteList = noteList
         notifyDataSetChanged()
     }
 }

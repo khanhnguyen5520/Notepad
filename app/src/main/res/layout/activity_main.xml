@@ -18,7 +18,37 @@
             android:layout_height="50dp"
             android:id="@+id/toolbar"
             android:background="@color/gray"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+<!--            <androidx.appcompat.widget.SearchView-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="12dp"-->
+<!--                android:id="@+id/search"-->
+<!--                app:iconifiedByDefault="false"-->
+<!--                app:searchHintIcon="@null"-->
+<!--                app:queryHint="Search..."-->
+<!--                android:focusable="false"-->
+<!--                app:searchIcon="@drawable/baseline_search_24"-->
+<!--                />-->
+            <TextView
+                android:id="@+id/btnSort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SORT"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:textStyle="bold"
+                android:onClick="SortPopup"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:src="@drawable/baseline_search_24"
+                android:layout_marginEnd="20dp"/>
+
+        </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
             android:id="@+id/adViewLayout"
@@ -38,11 +68,23 @@
                 android:backgroundTint="@color/gray"/>
         </LinearLayout>
 
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:iconifiedByDefault="false"
+            app:searchHintIcon="@null"
+            app:queryHint="Search..."
+            android:focusable="false"
+            app:searchIcon="@drawable/baseline_search_24"
+            android:layout_below="@+id/adViewLayout" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/notesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/adViewLayout"
+            android:layout_below="@+id/searchView"
             android:background="@color/graylight"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -59,14 +101,7 @@
             app:cornerRadius="28dp"
             android:backgroundTint="@color/gray"
             />
-        <TextView
-            android:id="@+id/tvPath"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/addBtn"
-            android:gravity="bottom"
-            android:layout_alignBottom="@id/addBtn"
-            />
+
 
     </RelativeLayout>
 
