@@ -32,8 +32,10 @@ class UpdateActivity : AppCompatActivity() {
 
     //get current datetime
     private val time = Calendar.getInstance().time
+
+    @SuppressLint("SimpleDateFormat")
     private val formatter = SimpleDateFormat("dd/MM/yyyy, HH:mm")
-    val editDate = formatter.format(time)
+    private val editDate = formatter.format(time)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +61,7 @@ class UpdateActivity : AppCompatActivity() {
         binding.updateSaveButton.setOnClickListener {
             val newTitle = binding.edtUpdateTitle.text.toString()
             val newContent = binding.edtUpdateContent.text.toString()
-            val updateNote = Note(noteId, newTitle, newContent,note.creDate, editDate)
+            val updateNote = Note(noteId, newTitle, newContent, note.creDate, editDate)
             db.updateNote(updateNote)
             finish()
             Toast.makeText(this, "Changes Save", Toast.LENGTH_SHORT).show()
@@ -85,7 +87,11 @@ class UpdateActivity : AppCompatActivity() {
             }
 
             R.id.share -> {
-                // Handle Option 1 click
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.type="text/plan"
+                intent.putExtra(Intent.EXTRA_SUBJECT,"Subject Here")
+                intent.putExtra(Intent.EXTRA_TEXT,note.content)
+                startActivity(Intent.createChooser(intent,"Share via"))
                 true
             }
 
@@ -118,8 +124,7 @@ class UpdateActivity : AppCompatActivity() {
             R.id.category -> {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Categories can be added in the app's menu. To open the menu use the button in the top left corner of the note list screen.")
-                    .setNegativeButton("OK") {
-                            dialogInterface: DialogInterface, _: Int ->
+                    .setNegativeButton("OK") { dialogInterface: DialogInterface, _: Int ->
                         dialogInterface.dismiss()
                     }.show()
                 true
@@ -160,7 +165,7 @@ class UpdateActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "InflateParams", "SetTextI18n")
     private fun infoPopup() {
         val view = layoutInflater.inflate(R.layout.popup_info, null)
 
@@ -183,17 +188,17 @@ class UpdateActivity : AppCompatActivity() {
         tvWord.text = "Words: $count"
 
         val tvLine = v.findViewById<TextView>(R.id.tvWrapped)
-        if (note.content.lines().size == 1){
+        if (note.content.lines().size == 1) {
             tvLine.text = "Wrapped lines: ${note.content.lines().size} "
         } else {
-            tvLine.text = "Wrapped lines: ${note.content.lines().size-1} "
+            tvLine.text = "Wrapped lines: ${note.content.lines().size - 1} "
         }
 
         val tvCharacter = v.findViewById<TextView>(R.id.tvCharacters)
         tvCharacter.text = "Characters: ${binding.edtUpdateContent.text.length} "
 
         val tvSpace = v.findViewById<TextView>(R.id.tvNoWhitespaces)
-        val whitespace = binding.edtUpdateContent.text.replace("\\s".toRegex(),"")
+        val whitespace = binding.edtUpdateContent.text.replace("\\s".toRegex(), "")
         tvSpace.text = "Characters without whitespaces: ${whitespace.length}"
 
         val tvCre = v.findViewById<TextView>(R.id.tvCreDate)
@@ -210,17 +215,16 @@ class UpdateActivity : AppCompatActivity() {
 
     }
 
-    private fun readMode(edt: EditText){
+    private fun readMode(edt: EditText) {
         edt.isFocusable = false
         edt.isClickable = false
         edt.isLongClickable = false
         edt.keyListener = null
         binding.edtUpdateTitle.setOnClickListener {
-            Toast.makeText(this,"Tap twice to edit", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Tap twice to edit", Toast.LENGTH_LONG).show()
         }
         binding.edtUpdateTitle.setOnClickListener {
-            Toast.makeText(this,"Tap twice to edit", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Tap twice to edit", Toast.LENGTH_LONG).show()
         }
     }
-
 }
