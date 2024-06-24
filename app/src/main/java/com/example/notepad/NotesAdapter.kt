@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.notepad.activity.UpdateNoteActivity
+import com.example.notepad.activity.UpdateActivity
 import com.example.notepad.model.Note
 
 class NotesAdapter(private var noteList: ArrayList<Note>) :
@@ -17,13 +17,14 @@ class NotesAdapter(private var noteList: ArrayList<Note>) :
     var activity: Activity? = null
     private var selected = ArrayList<Note>()
 
-    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvTime: TextView = itemView.findViewById(R.id.tvTime)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.note_item,parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false)
         return NoteViewHolder(view)
     }
 
@@ -38,15 +39,17 @@ class NotesAdapter(private var noteList: ArrayList<Note>) :
         holder.tvTime.text = "Last edit: ${note.editDate}"
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(holder.itemView.context, UpdateNoteActivity::class.java).apply {
-                putExtra("note_id",note.id)
+            val intent = Intent(holder.itemView.context, UpdateActivity::class.java).apply {
+                putExtra("note_id", note.id)
             }
             holder.itemView.context.startActivity(intent)
         }
 
+
     }
+
     @SuppressLint("NotifyDataSetChanged")
-    fun refreshData(newNotes: ArrayList<Note>){
+    fun refreshData(newNotes: ArrayList<Note>) {
         noteList = newNotes
         notifyDataSetChanged()
     }
@@ -59,7 +62,7 @@ class NotesAdapter(private var noteList: ArrayList<Note>) :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setFilterList(noteList: ArrayList<Note>){
+    fun setFilterList(noteList: ArrayList<Note>) {
         this.noteList = noteList
         notifyDataSetChanged()
     }

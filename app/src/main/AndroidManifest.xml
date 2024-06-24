@@ -31,7 +31,7 @@
             android:name=".activity.SettingActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.UpdateNoteActivity"
+            android:name=".activity.UpdateActivity"
             android:exported="false" />
         <activity
             android:name=".activity.AddNoteActivity"

@@ -5,9 +5,14 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.PopupWindow
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.notepad.DAO.NotesDatabaseHelper
@@ -18,11 +23,12 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 
 @Suppress("DEPRECATION")
-class UpdateNoteActivity : AppCompatActivity() {
+class UpdateActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUpdateNoteBinding
     private lateinit var db: NotesDatabaseHelper
     private var noteId: Int = -1
+    private lateinit var note: Note
 
     //get current datetime
     private val time = Calendar.getInstance().time
@@ -46,7 +52,7 @@ class UpdateNoteActivity : AppCompatActivity() {
             return
         }
 
-        val note = db.getNoteByID(noteId)
+        note = db.getNoteByID(noteId)
         binding.edtUpdateTitle.setText(note.title)
         binding.edtUpdateContent.setText(note.content)
 
@@ -58,8 +64,6 @@ class UpdateNoteActivity : AppCompatActivity() {
             finish()
             Toast.makeText(this, "Changes Save", Toast.LENGTH_SHORT).show()
         }
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -143,7 +147,7 @@ class UpdateNoteActivity : AppCompatActivity() {
             }
 
             R.id.info -> {
-                // Handle Option 2 click
+                infoPopup()
                 true
             }
 
@@ -154,6 +158,56 @@ class UpdateNoteActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun infoPopup() {
+        val view = layoutInflater.inflate(R.layout.popup_info, null)
+
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(R.layout.popup_info, null)
+        val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val focusable = true
+        val popupWindow = PopupWindow(popupView, width, height, focusable)
+
+        popupWindow.elevation = 20F
+
+        // show the popup window
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+        val v = popupWindow.contentView
+
+        val tvWord = v.findViewById<TextView>(R.id.tvWord)
+        val words = note.content.split(Regex("\\s+"))
+        val count = words.filter { it.isNotBlank() }.size
+        tvWord.text = "Words: $count"
+
+        val tvLine = v.findViewById<TextView>(R.id.tvWrapped)
+        if (note.content.lines().size == 1){
+            tvLine.text = "Wrapped lines: ${note.content.lines().size} "
+        } else {
+            tvLine.text = "Wrapped lines: ${note.content.lines().size-1} "
+        }
+
+        val tvCharacter = v.findViewById<TextView>(R.id.tvCharacters)
+        tvCharacter.text = "Characters: ${binding.edtUpdateContent.text.length} "
+
+        val tvSpace = v.findViewById<TextView>(R.id.tvNoWhitespaces)
+        val whitespace = binding.edtUpdateContent.text.replace("\\s".toRegex(),"")
+        tvSpace.text = "Characters without whitespaces: ${whitespace.length}"
+
+        val tvCre = v.findViewById<TextView>(R.id.tvCreDate)
+        tvCre.text = "Created at: ${note.creDate}"
+
+        val tvEdit = v.findViewById<TextView>(R.id.tvEdiDate)
+        tvEdit.text = "Last saved at: ${note.editDate}"
+
+        val btnOk = v.findViewById<TextView>(R.id.btnOk)
+        btnOk.setOnTouchListener { _, _ ->
+            popupWindow.dismiss()
+            true
+        }
+
     }
 
     private fun readMode(edt: EditText){

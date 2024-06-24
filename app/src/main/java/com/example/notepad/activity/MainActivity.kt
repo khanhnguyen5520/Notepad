@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.view.ActionMode
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -48,11 +49,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var adapter: NotesAdapter
     private var noteList = ArrayList<Note>()
     private var searchList = ArrayList<Note>()
+    private var actionMode: ActionMode? = null
 
     //get current datetime
-    val time = Calendar.getInstance().time
-    val formatter = SimpleDateFormat("dd/MM/yyyy, HH:mm")
-    val current = formatter.format(time)
+    private val time = Calendar.getInstance().time
+
+    @SuppressLint("SimpleDateFormat")
+    private val formatter = SimpleDateFormat("dd/MM/yyyy, HH:mm")
+    private val current = formatter.format(time)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,6 +90,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //chạy quảng cáo
         ads()
+
     }
 
     private fun getData() {
