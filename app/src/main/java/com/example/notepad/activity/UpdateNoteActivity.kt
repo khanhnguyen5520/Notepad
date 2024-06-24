@@ -14,12 +14,20 @@ import com.example.notepad.DAO.NotesDatabaseHelper
 import com.example.notepad.R
 import com.example.notepad.databinding.ActivityUpdateNoteBinding
 import com.example.notepad.model.Note
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
+@Suppress("DEPRECATION")
 class UpdateNoteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUpdateNoteBinding
     private lateinit var db: NotesDatabaseHelper
     private var noteId: Int = -1
+
+    //get current datetime
+    private val time = Calendar.getInstance().time
+    private val formatter = SimpleDateFormat("dd/MM/yyyy, HH:mm")
+    val editDate = formatter.format(time)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +53,7 @@ class UpdateNoteActivity : AppCompatActivity() {
         binding.updateSaveButton.setOnClickListener {
             val newTitle = binding.edtUpdateTitle.text.toString()
             val newContent = binding.edtUpdateContent.text.toString()
-            val updateNote = Note(noteId, newTitle, newContent)
+            val updateNote = Note(noteId, newTitle, newContent,note.creDate, editDate)
             db.updateNote(updateNote)
             finish()
             Toast.makeText(this, "Changes Save", Toast.LENGTH_SHORT).show()
@@ -80,12 +88,12 @@ class UpdateNoteActivity : AppCompatActivity() {
             R.id.delete -> {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("The '${binding.edtUpdateTitle.text}' note will be deleted, Are you sure?")
-                    .setPositiveButton("Yes") { dialogInterface: DialogInterface, i: Int ->
+                    .setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                         db.deleteNote(noteId)
                         startActivity(Intent(this, MainActivity::class.java))
                         Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show()
                     }
-                    .setNegativeButton("No") { dialogInterface: DialogInterface, i: Int ->
+                    .setNegativeButton("No") { dialogInterface: DialogInterface, _: Int ->
                         dialogInterface.dismiss()
                     }
                     .show()
@@ -107,7 +115,7 @@ class UpdateNoteActivity : AppCompatActivity() {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Categories can be added in the app's menu. To open the menu use the button in the top left corner of the note list screen.")
                     .setNegativeButton("OK") {
-                        dialogInterface: DialogInterface, i: Int ->
+                            dialogInterface: DialogInterface, _: Int ->
                         dialogInterface.dismiss()
                     }.show()
                 true
@@ -148,7 +156,7 @@ class UpdateNoteActivity : AppCompatActivity() {
         }
     }
 
-    fun readMode(edt: EditText){
+    private fun readMode(edt: EditText){
         edt.isFocusable = false
         edt.isClickable = false
         edt.isLongClickable = false
@@ -159,12 +167,6 @@ class UpdateNoteActivity : AppCompatActivity() {
         binding.edtUpdateTitle.setOnClickListener {
             Toast.makeText(this,"Tap twice to edit", Toast.LENGTH_LONG).show()
         }
-    }
-
-    fun writeMode(edt: EditText){
-        edt.isFocusable = true
-        edt.isClickable = true
-        edt.isLongClickable = true
     }
 
 }
