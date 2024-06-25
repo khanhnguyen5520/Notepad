@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.CalendarContract.Colors
 import android.provider.OpenableColumns
-import android.view.ActionMode
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -35,13 +35,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 
-@Suppress("UNREACHABLE_CODE", "DEPRECATION")
+@Suppress("UNREACHABLE_CODE", "DEPRECATION", "UNUSED_EXPRESSION")
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var adapter: NotesAdapter
     private var noteList = ArrayList<Note>()
     private var searchList = ArrayList<Note>()
-    private var actionMode: ActionMode? = null
+    private var content: String? = null
 
     //get current datetime
     private val time = Calendar.getInstance().time
@@ -219,6 +220,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.export -> {
+
                 true
             }
 
@@ -230,7 +232,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 
     @SuppressLint("ClickableViewAccessibility", "InflateParams")
     private fun sortFilter() {
@@ -260,7 +261,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val rdZA = v.findViewById<RadioButton>(R.id.rdZA)
         val rdCreationNewest = v.findViewById<RadioButton>(R.id.rdCreationNewest)
         val rdCreationOldest = v.findViewById<RadioButton>(R.id.rdCreationOldest)
-        val rdColor = v.findViewById<RadioButton>(R.id.rdColor)
 
 
         btnClose.setOnTouchListener { _, _ ->
@@ -357,8 +357,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val title = getFileName(uri, applicationContext)
         val content = total.toString()
         val note = Note(5, title!!, content, current, current)
+
+        note.color= "#f7f6d0"
         db.insertNote(note)
-        Toast.makeText(this, "Imported", Toast.LENGTH_SHORT).show()
     }
 
     private fun rateApp() {

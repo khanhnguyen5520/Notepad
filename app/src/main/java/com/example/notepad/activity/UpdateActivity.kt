@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -20,7 +22,11 @@ import com.example.notepad.DAO.NotesDatabaseHelper
 import com.example.notepad.R
 import com.example.notepad.databinding.ActivityUpdateBinding
 import com.example.notepad.model.Note
-import yuku.ambilwarna.AmbilWarnaDialog
+import com.skydoves.colorpickerview.ColorEnvelope
+import com.skydoves.colorpickerview.ColorPickerView
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
+import com.skydoves.colorpickerview.sliders.AlphaSlideBar
+import com.skydoves.colorpickerview.sliders.BrightnessSlideBar
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -32,7 +38,7 @@ class UpdateActivity : AppCompatActivity() {
     private lateinit var db: NotesDatabaseHelper
     private var noteId: Int = -1
     private lateinit var note: Note
-    private var defaultColor: Int = 0
+    private lateinit var currentColor: String
 
     //get current datetime
     private val time = Calendar.getInstance().time
@@ -49,9 +55,6 @@ class UpdateActivity : AppCompatActivity() {
 
         db = NotesDatabaseHelper(this)
 
-        defaultColor = ContextCompat.getColor(this, R.color.background)
-
-
         setSupportActionBar(binding.tbUpdate)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -65,24 +68,20 @@ class UpdateActivity : AppCompatActivity() {
         binding.edtUpdateTitle.setText(note.title)
         binding.edtUpdateContent.setText(note.content)
 
-        //setBackground()
-        binding.updateSaveButton.setOnClickListener {
+        binding.UpdateNote.setBackgroundColor(Color.parseColor(note.color))
+
+        binding.btnUpdateSave.setOnClickListener {
             val newTitle = binding.edtUpdateTitle.text.toString()
             val newContent = binding.edtUpdateContent.text.toString()
             val updateNote = Note(noteId, newTitle, newContent, note.creDate, editDate)
+            updateNote.color = currentColor
             db.updateNote(updateNote)
             finish()
-            Toast.makeText(this, "Changes Save", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, updateNote.color, Toast.LENGTH_SHORT).show()
         }
     }
 
-//    private fun setBackground() {
-//        binding.main.setBackgroundColor(note.color)
-//        binding.main.setBackgroundColor(note.color)
-//    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.options_menu_update, menu)
         return true
     }
@@ -187,18 +186,49 @@ class UpdateActivity : AppCompatActivity() {
     }
 
     private fun openColorPicker() {
-        val ambilWarnaDialog =
-            AmbilWarnaDialog(this, defaultColor, object : AmbilWarnaDialog.OnAmbilWarnaListener {
-                override fun onCancel(dialog: AmbilWarnaDialog?) {
-                }
 
-                override fun onOk(dialog: AmbilWarnaDialog?, color: Int) {
-                    defaultColor = color
-                    note.color = defaultColor
-                }
+        val view = layoutInflater.inflate(R.layout.popup_color, null)
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(R.layout.popup_color, null)
+        val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val focusable = true
+        val popupWindow = PopupWindow(popupView, width, height, focusable)
 
-            })
-        ambilWarnaDialog.show()
+        popupWindow.elevation = 20F
+
+        // show the popup window
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+
+        val v = popupWindow.contentView
+        val colorPickerView = v.findViewById<ColorPickerView>(R.id.colorPickerView)
+        val alphaSlideBar = v.findViewById<AlphaSlideBar>(R.id.alphaSlideBar)
+        val brightnessSlideBar = v.findViewById<BrightnessSlideBar>(R.id.brightnessSlide)
+        val test = v.findViewById<TextView>(R.id.testColor)
+
+        colorPickerView.setColorListener(object : ColorEnvelopeListener {
+            override fun onColorSelected(envelope: ColorEnvelope?, fromUser: Boolean) {
+                test.setBackgroundColor(envelope!!.color)
+                currentColor = "#" + envelope.hexCode
+            }
+        })
+
+
+        val btnOk = v.findViewById<TextView>(R.id.btnColorOK)
+        btnOk.setOnClickListener {
+            note.color = currentColor
+            binding.UpdateNote.setBackgroundColor(Color.parseColor(note.color))
+            popupWindow.dismiss()
+        }
+
+        val btnCancel =v.findViewById<TextView>(R.id.btnColorCancel)
+        btnCancel.setOnClickListener {
+
+            popupWindow.dismiss()
+
+        }
+        colorPickerView.attachBrightnessSlider(brightnessSlideBar)
+        colorPickerView.attachAlphaSlider(alphaSlideBar)
     }
 
     @SuppressLint("ClickableViewAccessibility", "InflateParams", "SetTextI18n")
@@ -267,7 +297,6 @@ class UpdateActivity : AppCompatActivity() {
     @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 try {

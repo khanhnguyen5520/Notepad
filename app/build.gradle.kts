@@ -54,5 +54,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.play.services.ads)
     implementation(libs.expandabletextview)
-    implementation("com.github.yukuku:ambilwarna:2.0.1")
+    implementation ("com.github.skydoves:colorpickerview:2.3.0")
 }

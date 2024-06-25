@@ -3,9 +3,11 @@ package com.example.notepad
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notepad.activity.UpdateActivity
@@ -20,6 +22,7 @@ class NotesAdapter(private var noteList: ArrayList<Note>) :
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvTime: TextView = itemView.findViewById(R.id.tvTime)
+        val bgItem: LinearLayout = itemView.findViewById(R.id.bgItem)
 
     }
 
@@ -37,6 +40,8 @@ class NotesAdapter(private var noteList: ArrayList<Note>) :
         val note = noteList[position]
         holder.tvTitle.text = note.title
         holder.tvTime.text = "Last edit: ${note.editDate}"
+        holder.bgItem.setBackgroundColor(Color.parseColor(note.color))
+
 
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, UpdateActivity::class.java).apply {
