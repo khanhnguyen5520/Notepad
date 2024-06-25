@@ -10,6 +10,7 @@
     </style>
 
     <style name="Theme.Notepad" parent="Base.Theme.Notepad" />
+
     <style name="ChangeTextColor" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
         <item name="android:textColor">@color/black</item>
     </style>

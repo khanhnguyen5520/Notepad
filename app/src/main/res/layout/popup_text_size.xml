@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:layout_gravity="center"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/textTest"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:textSize="18sp"
+        android:text="Text size 18"
+        android:gravity="center"/>
+
+    <SeekBar
+        android:id="@+id/seekBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="63"
+        android:min="6"/>
+
+    <Button
+        android:id="@+id/btnDefault"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SET DEFAULT" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end">
+
+        <TextView
+            android:id="@+id/btnCancelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CANCEL"
+            android:layout_margin="20dp"/>
+        <TextView
+            android:id="@+id/btnOkText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OK"
+            android:layout_margin="20dp"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

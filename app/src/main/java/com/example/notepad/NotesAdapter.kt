@@ -16,6 +16,7 @@ import com.example.notepad.model.Note
 class NotesAdapter(private var noteList: ArrayList<Note>) :
     RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
+
     var activity: Activity? = null
     private var selected = ArrayList<Note>()
 
@@ -35,6 +36,7 @@ class NotesAdapter(private var noteList: ArrayList<Note>) :
         return noteList.size
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
 
         val note = noteList[position]
@@ -42,15 +44,12 @@ class NotesAdapter(private var noteList: ArrayList<Note>) :
         holder.tvTime.text = "Last edit: ${note.editDate}"
         holder.bgItem.setBackgroundColor(Color.parseColor(note.color))
 
-
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, UpdateActivity::class.java).apply {
                 putExtra("note_id", note.id)
             }
             holder.itemView.context.startActivity(intent)
         }
-
-
     }
 
     @SuppressLint("NotifyDataSetChanged")

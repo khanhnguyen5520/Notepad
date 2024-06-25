@@ -34,6 +34,9 @@ android {
         jvmTarget = "1.8"
     }
     viewBinding.enable = true
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -49,10 +52,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.extensions)
     implementation(libs.viewmodel)
     implementation(libs.compose.theme.adapter)
+    implementation(libs.androidx.navigation.fragment.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.play.services.ads)
     implementation(libs.expandabletextview)
-    implementation ("com.github.skydoves:colorpickerview:2.3.0")
+    implementation (libs.colorpickerview)
 }

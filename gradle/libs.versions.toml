@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.0"
+colorpickerview = "2.3.0"
 expandabletextview = "1.0.5"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -17,9 +18,11 @@ roomKtx = "2.6.1"
 lifecycleExtensions = "2.2.0"
 viewmodel = "1.1.1"
 composeThemeAdapter = "1.2.1"
+navigationFragmentKtx = "2.7.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+colorpickerview = { module = "com.github.skydoves:colorpickerview", version.ref = "colorpickerview" }
 expandabletextview = { module = "at.blogc:expandabletextview", version.ref = "expandabletextview" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -35,6 +38,7 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycleExtensions" }
 viewmodel = { group = "android.arch.lifecycle", name = "viewmodel", version.ref = "viewmodel" }
 compose-theme-adapter = { group = "com.google.android.material", name = "compose-theme-adapter", version.ref = "composeThemeAdapter" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

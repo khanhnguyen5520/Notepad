@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.CalendarContract.Colors
 import android.provider.OpenableColumns
+import android.view.ActionMode
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -35,14 +35,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 
-@Suppress("UNREACHABLE_CODE", "DEPRECATION", "UNUSED_EXPRESSION")
+@Suppress("UNREACHABLE_CODE", "DEPRECATION")
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
@@ -50,7 +49,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var adapter: NotesAdapter
     private var noteList = ArrayList<Note>()
     private var searchList = ArrayList<Note>()
-    private var content: String? = null
 
     //get current datetime
     private val time = Calendar.getInstance().time
@@ -117,7 +115,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-
                 searchList.clear()
                 val searchText = newText!!.lowercase(Locale.getDefault())
                 if (searchText.isNotEmpty()) {
@@ -130,7 +127,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                         }
                     }
-
                 } else {
                     searchList.clear()
                     searchList.addAll(noteList)
@@ -159,17 +155,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.nav_trash -> {
-                Toast.makeText(this, "Trash", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, TrashActivity::class.java))
                 true
             }
 
             R.id.nav_setting -> {
                 startActivity(Intent(this, SettingActivity::class.java))
-                true
-            }
-
-            R.id.nav_ads -> {
-                Toast.makeText(this, "Ads", Toast.LENGTH_SHORT).show()
                 true
             }
 
@@ -192,7 +183,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
     }
-
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
@@ -261,6 +251,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val rdZA = v.findViewById<RadioButton>(R.id.rdZA)
         val rdCreationNewest = v.findViewById<RadioButton>(R.id.rdCreationNewest)
         val rdCreationOldest = v.findViewById<RadioButton>(R.id.rdCreationOldest)
+        val color = v.findViewById<RadioButton>(R.id.rdColor)
 
 
         btnClose.setOnTouchListener { _, _ ->
@@ -279,9 +270,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (rdZA.isChecked) {
                 searchList.reverse()
             }
-            adapter.setFilterList(searchList)
-            popupWindow.dismiss()
-            true
 
             if (rdCreationNewest.isChecked) {
                 searchList.sortByDescending {
@@ -291,9 +279,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (rdCreationOldest.isChecked) {
                 searchList.reverse()
             }
-            adapter.setFilterList(searchList)
-            popupWindow.dismiss()
-            true
 
             if (rdEditNewest.isChecked) {
                 searchList.sortByDescending {
@@ -303,15 +288,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (rdEditOldest.isChecked) {
                 searchList.reverse()
             }
+            if (color.isChecked) {
+                searchList.reverse()
+            }
+
             adapter.setFilterList(searchList)
             popupWindow.dismiss()
             true
-
         }
     }
 
-    private val sActivityResultLauncher =
-        registerForActivityResult(StartActivityForResult()) { result ->
+    private val sActivityResultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri = result.data?.data!!
                 readFromUri(uri)
@@ -358,7 +345,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val content = total.toString()
         val note = Note(5, title!!, content, current, current)
 
-        note.color= "#f7f6d0"
+        note.color = "#f7f6d0"
         db.insertNote(note)
     }
 
@@ -390,4 +377,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
 }

@@ -2,22 +2,29 @@ package com.example.notepad.activity
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.example.notepad.DAO.NotesDatabaseHelper
 import com.example.notepad.R
 import com.example.notepad.databinding.ActivityUpdateBinding
@@ -39,6 +46,9 @@ class UpdateActivity : AppCompatActivity() {
     private var noteId: Int = -1
     private lateinit var note: Note
     private lateinit var currentColor: String
+    private var deleteList = ArrayList<Note>()
+    var currentSize = 18
+
 
     //get current datetime
     private val time = Calendar.getInstance().time
@@ -50,11 +60,11 @@ class UpdateActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         db = NotesDatabaseHelper(this)
-
         setSupportActionBar(binding.tbUpdate)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -77,8 +87,120 @@ class UpdateActivity : AppCompatActivity() {
             updateNote.color = currentColor
             db.updateNote(updateNote)
             finish()
-            Toast.makeText(this, updateNote.color, Toast.LENGTH_SHORT).show()
         }
+        formatBar()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun formatBar() {
+
+        val text = binding.edtUpdateContent.text.toString()
+        val spannableBuilder = SpannableStringBuilder(text)
+
+        var start = 0
+        var end = 0
+
+        binding.edtUpdateContent.setOnLongClickListener {
+            start = binding.edtUpdateContent.selectionStart
+            Log.d("check", "start:$start ")
+
+            end = binding.edtUpdateContent.selectionEnd
+            Log.d("check", "end:$end ")
+            true
+        }
+
+
+        binding.btnClose.setOnClickListener {
+            binding.formatBar.visibility = View.GONE
+        }
+
+        binding.btnColorText.setOnClickListener {
+            openColorPicker()
+        }
+
+        binding.btnTextSize.setOnClickListener {
+            dialogTextSize()
+            if (currentSize != 18) {
+                binding.btnTextSize.setBackgroundColor(Color.GRAY)
+            }
+        }
+
+        binding.btnBold.setOnClickListener {
+
+            if(binding.btnBold.isClickable){
+
+                spannableBuilder.setSpan(StyleSpan(Typeface.BOLD), start, end, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                binding.btnBold.isClickable = !binding.btnBold.isClickable
+                binding.edtUpdateContent.text = spannableBuilder
+            }else{
+
+                spannableBuilder.setSpan(StyleSpan(Typeface.NORMAL), start, end, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                Toast.makeText(this, "no bold", Toast.LENGTH_SHORT).show()
+                binding.edtUpdateContent.setTypeface(null, Typeface.NORMAL)
+                binding.edtUpdateContent.text = spannableBuilder
+            }
+        }
+
+        binding.btnItalic.setOnClickListener {
+            if (binding.btnItalic.isClickable) {
+                binding.edtUpdateContent.setTypeface(null, Typeface.ITALIC)
+                Toast.makeText(this, "bold", Toast.LENGTH_SHORT).show()
+                binding.btnItalic.isClickable = !binding.btnItalic.isClickable
+            } else {
+                binding.btnItalic.isClickable = !binding.btnItalic.isClickable
+                Toast.makeText(this, "no bold", Toast.LENGTH_SHORT).show()
+                binding.edtUpdateContent.setTypeface(null, Typeface.NORMAL)
+            }
+        }
+    }
+
+    private fun dialogTextSize() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.popup_text_size)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog.show()
+
+        val seekBar = dialog.findViewById<SeekBar>(R.id.seekBarSize)
+        seekBar.progress = currentSize
+        val text = dialog.findViewById<TextView>(R.id.textTest)
+        val btnDefault = dialog.findViewById<Button>(R.id.btnDefault)
+        val btnCancel = dialog.findViewById<TextView>(R.id.btnCancelText)
+        val btnOk = dialog.findViewById<TextView>(R.id.btnOkText)
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            @SuppressLint("SetTextI18n")
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                currentSize = progress
+                text.text = "Text size: $currentSize"
+                text.textSize = currentSize.toFloat()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // Handle when user starts touching SeekBar
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // Handle when user stops touching SeekBar
+            }
+        })
+        btnDefault.setOnClickListener {
+            currentSize = 18
+            text.textSize = currentSize.toFloat()
+            seekBar.progress = 18
+        }
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        btnOk.setOnClickListener {
+            binding.edtUpdateContent.textSize = currentSize.toFloat()
+            dialog.dismiss()
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -111,15 +233,15 @@ class UpdateActivity : AppCompatActivity() {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("The '${binding.edtUpdateTitle.text}' note will be deleted, Are you sure?")
                     .setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                        db.deleteNote(noteId)
-                        startActivity(Intent(this, MainActivity::class.java))
+                        deleteList.add(note)
+                        db.deleteNoteByID(noteId)
+                        finish()
                         Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show()
                     }
                     .setNegativeButton("No") { dialogInterface: DialogInterface, _: Int ->
                         dialogInterface.dismiss()
                     }
                     .show()
-
                 true
             }
 
@@ -159,6 +281,7 @@ class UpdateActivity : AppCompatActivity() {
             }
 
             R.id.showFormatBar -> {
+                binding.formatBar.visibility = View.VISIBLE
                 true
             }
 
@@ -168,7 +291,7 @@ class UpdateActivity : AppCompatActivity() {
             }
 
             android.R.id.home -> {
-                onBackPressed()  // Handle the back button click
+                onBackPressed()
                 return true
             }
 
@@ -177,7 +300,6 @@ class UpdateActivity : AppCompatActivity() {
     }
 
     private fun exportFile() {
-
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.setType("text/plain")
@@ -185,6 +307,7 @@ class UpdateActivity : AppCompatActivity() {
         startActivityForResult(intent, 1)
     }
 
+    @SuppressLint("InflateParams")
     private fun openColorPicker() {
 
         val view = layoutInflater.inflate(R.layout.popup_color, null)
@@ -216,12 +339,11 @@ class UpdateActivity : AppCompatActivity() {
 
         val btnOk = v.findViewById<TextView>(R.id.btnColorOK)
         btnOk.setOnClickListener {
-            note.color = currentColor
-            binding.UpdateNote.setBackgroundColor(Color.parseColor(note.color))
+            binding.UpdateNote.setBackgroundColor(Color.parseColor(currentColor))
             popupWindow.dismiss()
         }
 
-        val btnCancel =v.findViewById<TextView>(R.id.btnColorCancel)
+        val btnCancel = v.findViewById<TextView>(R.id.btnColorCancel)
         btnCancel.setOnClickListener {
 
             popupWindow.dismiss()
@@ -300,18 +422,16 @@ class UpdateActivity : AppCompatActivity() {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 try {
-
                     val uri = data!!.data
                     val outputStream = contentResolver.openOutputStream(uri!!)
                     outputStream?.write(note.content.toByteArray())
                     outputStream?.close()
-
                     Toast.makeText(this, "done", Toast.LENGTH_SHORT).show()
                 } catch (e: IOException) {
                     Toast.makeText(this, "Fail", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "faill no", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show()
             }
         }
     }

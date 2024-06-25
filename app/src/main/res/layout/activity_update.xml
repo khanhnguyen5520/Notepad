@@ -1,44 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.UpdateActivity"
-    android:background="@color/graylight">
+    android:background="@color/graylight"
+    android:orientation="vertical"
+    tools:context=".activity.UpdateActivity">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbUpdate"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/tbUpdate"
         android:background="@color/background"
         android:elevation="4dp"
-        app:titleTextColor="@color/white"
         android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="@color/white">
 
         <TextView
             android:id="@+id/btnUndo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="false"
-            android:layout_marginEnd="10dp"
             android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
             android:text="UNDO"
+            android:textColor="@color/white"
             android:textStyle="bold"
-            android:textColor="@color/white"/>
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/btnUpdateSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="false"
-            android:layout_marginEnd="20dp"
             android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
             android:text="SAVE"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -48,26 +50,119 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tbUpdate"
-        android:orientation="vertical"
+        android:layout_margin="5dp"
         android:background="@drawable/border"
-        android:layout_margin="5dp">
+        android:orientation="vertical">
+
         <EditText
             android:id="@+id/edtUpdateTitle"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:hint="@string/enter_the_title"
-            android:textSize="20sp"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/edtUpdateContent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/enter_the_description"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
             android:gravity="top"
+            android:hint="@string/enter_the_description"
             android:textSize="18sp">
+
             <requestFocus />
         </EditText>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/formatBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:padding="5dp">
+
+            <ImageButton
+                android:id="@+id/btnBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00B49A9A"
+                app:srcCompat="@drawable/format_bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageButton
+                android:id="@+id/btnItalic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/format_italic"
+                android:background="#00B49A9A"
+                app:layout_constraintStart_toEndOf="@+id/btnBold"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <ImageButton
+                android:id="@+id/btnUnder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/format_underlined"
+                android:background="#00B49A9A"
+                app:layout_constraintStart_toEndOf="@+id/btnItalic"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <ImageButton
+                android:id="@+id/btnFill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/format_color_fill_24"
+                android:background="#00B49A9A"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                app:layout_constraintStart_toEndOf="@+id/btnUnder"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <ImageButton
+                android:id="@+id/btnColorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/format_color_text_24"
+                android:background="#00B49A9A"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                app:layout_constraintStart_toEndOf="@+id/btnFill"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+
+            <ImageButton
+                android:id="@+id/btnStrike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/format_strikethrough"
+                android:background="#00B49A9A"
+                app:layout_constraintStart_toEndOf="@+id/btnColorText"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <ImageButton
+                android:id="@+id/btnTextSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/text_size"
+                android:background="#00B49A9A"
+                app:layout_constraintStart_toEndOf="@+id/btnStrike"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+            <ImageButton
+                android:id="@+id/btnClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/close"
+                android:background="#00B49A9A"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

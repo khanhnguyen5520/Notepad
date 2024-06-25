@@ -16,6 +16,10 @@
         android:theme="@style/Theme.Notepad"
         tools:targetApi="31">
         <activity
+            android:name=".activity.TrashActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Notepad" />
+        <activity
             android:name=".activity.BackupActivity"
             android:exported="false" />
         <activity
@@ -33,11 +37,10 @@
         <activity
             android:name=".activity.UpdateActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.AddNoteActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">
