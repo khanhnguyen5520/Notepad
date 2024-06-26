@@ -137,6 +137,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
         })
+
         return super.onCreateOptionsMenu(menu)
     }
 

@@ -8,9 +8,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Editable
+import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.TextWatcher
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -25,6 +29,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import com.example.notepad.DAO.NotesDatabaseHelper
 import com.example.notepad.R
 import com.example.notepad.databinding.ActivityUpdateBinding
@@ -37,6 +42,7 @@ import com.skydoves.colorpickerview.sliders.BrightnessSlideBar
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Stack
 
 @Suppress("DEPRECATION")
 class UpdateActivity : AppCompatActivity() {
@@ -48,6 +54,11 @@ class UpdateActivity : AppCompatActivity() {
     private lateinit var currentColor: String
     private var deleteList = ArrayList<Note>()
     var currentSize = 18
+    private lateinit var spannableBuilder: SpannableStringBuilder
+    private var start = 0
+    var end = 0
+    private val undoText = Stack<String>()
+    private var isInUndoRedo = false
 
 
     //get current datetime
@@ -78,44 +89,61 @@ class UpdateActivity : AppCompatActivity() {
         binding.edtUpdateTitle.setText(note.title)
         binding.edtUpdateContent.setText(note.content)
 
+
+
         binding.UpdateNote.setBackgroundColor(Color.parseColor(note.color))
 
         binding.btnUpdateSave.setOnClickListener {
             val newTitle = binding.edtUpdateTitle.text.toString()
             val newContent = binding.edtUpdateContent.text.toString()
             val updateNote = Note(noteId, newTitle, newContent, note.creDate, editDate)
-            updateNote.color = currentColor
+            note.color = currentColor
             db.updateNote(updateNote)
             finish()
         }
+
+        binding.edtUpdateContent.doOnTextChanged { _, _, _, _ ->
+            binding.btnUndo.setTextColor(Color.WHITE)
+        }
+        binding.edtUpdateContent.addTextChangedListener(object : TextWatcher {
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (!isInUndoRedo) {
+                    val currentText = s.toString()
+                    undoText.push(currentText)
+                }
+            }
+        })
+
+        binding.btnUndo.setOnClickListener {
+            isInUndoRedo = true
+            if (undoText.size > 1) {
+                undoText.pop()
+                val newText = undoText.peek()
+                binding.edtUpdateContent.setText(newText)
+            }
+            if (undoText.size == 1) {
+                binding.btnUndo.setTextColor(Color.GRAY)
+            }
+            isInUndoRedo = false
+        }
+
         formatBar()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun formatBar() {
 
-        val text = binding.edtUpdateContent.text.toString()
-        val spannableBuilder = SpannableStringBuilder(text)
-
-        var start = 0
-        var end = 0
-
-        binding.edtUpdateContent.setOnLongClickListener {
-            start = binding.edtUpdateContent.selectionStart
-            Log.d("check", "start:$start ")
-
-            end = binding.edtUpdateContent.selectionEnd
-            Log.d("check", "end:$end ")
-            true
-        }
-
-
         binding.btnClose.setOnClickListener {
             binding.formatBar.visibility = View.GONE
         }
 
         binding.btnColorText.setOnClickListener {
-            openColorPicker()
+            openColorPicker("text")
         }
 
         binding.btnTextSize.setOnClickListener {
@@ -127,31 +155,61 @@ class UpdateActivity : AppCompatActivity() {
 
         binding.btnBold.setOnClickListener {
 
-            if(binding.btnBold.isClickable){
+            spannableBuilder = SpannableStringBuilder(binding.edtUpdateContent.getText())
+            start = binding.edtUpdateContent.selectionStart
+            end = binding.edtUpdateContent.selectionEnd
+            if (binding.btnBold.isClickable) {
 
-                spannableBuilder.setSpan(StyleSpan(Typeface.BOLD), start, end, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                binding.btnBold.isClickable = !binding.btnBold.isClickable
-                binding.edtUpdateContent.text = spannableBuilder
-            }else{
-
-                spannableBuilder.setSpan(StyleSpan(Typeface.NORMAL), start, end, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE)
-
+                spannableBuilder.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    start,
+                    end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            } else {
+                spannableBuilder.setSpan(
+                    StyleSpan(Typeface.NORMAL),
+                    start,
+                    end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
                 Toast.makeText(this, "no bold", Toast.LENGTH_SHORT).show()
-                binding.edtUpdateContent.setTypeface(null, Typeface.NORMAL)
-                binding.edtUpdateContent.text = spannableBuilder
+                //binding.edtUpdateContent.setTypeface(null, Typeface.NORMAL)
+
             }
+            binding.edtUpdateContent.text = spannableBuilder
+            // binding.btnBold.isClickable = !binding.btnBold.isClickable
         }
 
         binding.btnItalic.setOnClickListener {
+
+            spannableBuilder = SpannableStringBuilder(binding.edtUpdateContent.getText())
+            start = binding.edtUpdateContent.selectionStart
+            end = binding.edtUpdateContent.selectionEnd
+
             if (binding.btnItalic.isClickable) {
-                binding.edtUpdateContent.setTypeface(null, Typeface.ITALIC)
-                Toast.makeText(this, "bold", Toast.LENGTH_SHORT).show()
+
+                spannableBuilder.setSpan(
+                    StyleSpan(Typeface.ITALIC),
+                    start,
+                    end,
+                    SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
                 binding.btnItalic.isClickable = !binding.btnItalic.isClickable
+                binding.edtUpdateContent.text = spannableBuilder
             } else {
                 binding.btnItalic.isClickable = !binding.btnItalic.isClickable
+                spannableBuilder.setSpan(
+                    StyleSpan(Typeface.NORMAL),
+                    start,
+                    end,
+                    SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
                 Toast.makeText(this, "no bold", Toast.LENGTH_SHORT).show()
                 binding.edtUpdateContent.setTypeface(null, Typeface.NORMAL)
+                binding.edtUpdateContent.text = spannableBuilder
             }
         }
     }
@@ -197,7 +255,12 @@ class UpdateActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         btnOk.setOnClickListener {
-            binding.edtUpdateContent.textSize = currentSize.toFloat()
+            spannableBuilder = SpannableStringBuilder(binding.edtUpdateContent.getText())
+            start = binding.edtUpdateContent.selectionStart
+            end = binding.edtUpdateContent.selectionEnd
+            val textSizeSpan = AbsoluteSizeSpan(currentSize, true)
+            spannableBuilder.setSpan(textSizeSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            binding.edtUpdateContent.text = spannableBuilder
             dialog.dismiss()
         }
 
@@ -215,8 +278,22 @@ class UpdateActivity : AppCompatActivity() {
                 true
             }
 
-            R.id.undo -> {
-                // Handle Option 2 click
+            R.id.undoAll -> {
+                val alertDialogBuilder = AlertDialog.Builder(this)
+                alertDialogBuilder.apply {
+                    setMessage("Remove all of the note changes note since the last opeing of the note?")
+                    setPositiveButton("OK") { dialog, _ ->
+                        val lst = undoText.removeFirst()
+                        binding.edtUpdateContent.setText(lst)
+                        dialog.dismiss()
+                    }
+                    setNegativeButton("CANCEL") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                }
+                val alertDialog = alertDialogBuilder.create()
+                alertDialog.show()
+
                 true
             }
 
@@ -245,8 +322,7 @@ class UpdateActivity : AppCompatActivity() {
                 true
             }
 
-            R.id.search -> {
-                // Handle Option 1 click
+            R.id.noteSearch -> {
                 true
             }
 
@@ -265,7 +341,7 @@ class UpdateActivity : AppCompatActivity() {
             }
 
             R.id.colorize -> {
-                openColorPicker()
+                openColorPicker("background")
                 true
             }
 
@@ -308,7 +384,7 @@ class UpdateActivity : AppCompatActivity() {
     }
 
     @SuppressLint("InflateParams")
-    private fun openColorPicker() {
+    private fun openColorPicker(text: String) {
 
         val view = layoutInflater.inflate(R.layout.popup_color, null)
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -339,15 +415,23 @@ class UpdateActivity : AppCompatActivity() {
 
         val btnOk = v.findViewById<TextView>(R.id.btnColorOK)
         btnOk.setOnClickListener {
-            binding.UpdateNote.setBackgroundColor(Color.parseColor(currentColor))
+            if (text == "text") {
+                spannableBuilder = SpannableStringBuilder(binding.edtUpdateContent.getText())
+                start = binding.edtUpdateContent.selectionStart
+                end = binding.edtUpdateContent.selectionEnd
+                val colorSpan = ForegroundColorSpan(Color.parseColor(currentColor))
+                spannableBuilder.setSpan(colorSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                binding.edtUpdateContent.text = spannableBuilder
+            }
+            if (text == "background") {
+                binding.UpdateNote.setBackgroundColor(Color.parseColor(currentColor))
+            }
             popupWindow.dismiss()
         }
 
         val btnCancel = v.findViewById<TextView>(R.id.btnColorCancel)
         btnCancel.setOnClickListener {
-
             popupWindow.dismiss()
-
         }
         colorPickerView.attachBrightnessSlider(brightnessSlideBar)
         colorPickerView.attachAlphaSlider(alphaSlideBar)

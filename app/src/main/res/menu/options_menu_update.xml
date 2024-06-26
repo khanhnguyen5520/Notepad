@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/redo"
         android:title="Redo" />
-    <item android:id="@+id/undo"
+    <item android:id="@+id/undoAll"
         android:title="Undo all" />
     <item android:id="@+id/share"
         android:title="Share" />
     <item android:id="@+id/delete"
         android:title="Delete"/>
-    <item android:id="@+id/search"
-        android:title="Search" />
+    <item
+        android:id="@+id/noteSearch"
+        android:title="Search"
+        app:showAsAction="collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
     <item android:id="@+id/exportTextFile"
         android:title="Export to a text files" />
     <item android:id="@+id/category"

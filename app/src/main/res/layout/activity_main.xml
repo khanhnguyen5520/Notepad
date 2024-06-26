@@ -19,7 +19,6 @@
             android:background="@color/background"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-
         </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
