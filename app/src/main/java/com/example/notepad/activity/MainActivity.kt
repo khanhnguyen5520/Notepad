@@ -7,7 +7,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
-import android.view.ActionMode
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -299,7 +298,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private val sActivityResultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
+    private val sActivityResultLauncher =
+        registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri = result.data?.data!!
                 readFromUri(uri)
