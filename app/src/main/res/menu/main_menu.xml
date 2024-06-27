@@ -2,19 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/select"
+    <item
+        android:id="@+id/select"
         android:title="Select all notes" />
-    <item android:id="@+id/imports"
+    <item
+        android:id="@+id/imports"
         android:title="Import text files" />
-    <item android:id="@+id/export"
+    <item
+        android:id="@+id/export"
         android:title="Export notes to text files" />
 
     <item
         android:id="@+id/search"
         android:icon="@drawable/baseline_search_24"
         android:title="Search"
-        app:showAsAction="always|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
     <item
         android:id="@+id/sort"
         android:title="SORT"

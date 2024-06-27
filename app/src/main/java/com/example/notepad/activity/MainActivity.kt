@@ -49,6 +49,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var noteList = ArrayList<Note>()
     private var searchList = ArrayList<Note>()
 
+    private var isMultiSelectMode = false
+
     //get current datetime
     private val time = Calendar.getInstance().time
 
@@ -56,23 +58,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val formatter = SimpleDateFormat("dd/MM/yyyy, HH:mm")
     private val current = formatter.format(time)
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         db = NotesDatabaseHelper(this)
         getData()
-
-        adapter = NotesAdapter(searchList)
-        binding.notesRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.notesRecyclerView.adapter = adapter
-
-        binding.addBtn.setOnClickListener {
-            startActivity(Intent(this, AddNoteActivity::class.java))
-        }
 
         setSupportActionBar(binding.toolbar)
         val toggle = ActionBarDrawerToggle(
@@ -82,13 +74,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.string.nav_open,
             R.string.nav_close
         )
+
+        binding.notesRecyclerView.layoutManager = LinearLayoutManager(this)
+
+        adapter = NotesAdapter(noteList) { multiSelectMode ->
+            isMultiSelectMode = multiSelectMode
+            invalidateOptionsMenu() // Update the action bar
+        }
+
+        binding.notesRecyclerView.adapter = adapter
+
+        binding.addBtn.setOnClickListener {
+            startActivity(Intent(this, AddNoteActivity::class.java))
+        }
+
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         binding.navigationDrawer.setNavigationItemSelectedListener(this)
 
         //chạy quảng cáo
         ads()
-
     }
 
     private fun getData() {
@@ -102,42 +107,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.options_menu_main, menu)
-        val item = menu.findItem(R.id.search)
-        val searchView = item?.actionView as SearchView
+        if (isMultiSelectMode) {
+            menuInflater.inflate(R.menu.main_menu_select_all, menu)
+        } else {
+            menuInflater.inflate(R.menu.main_menu, menu)
+            val item = menu.findItem(R.id.search)
+            val searchView = item!!.actionView as SearchView
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                binding.notesRecyclerView.adapter!!.notifyDataSetChanged()
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                searchList.clear()
-                val searchText = newText!!.lowercase(Locale.getDefault())
-                if (searchText.isNotEmpty()) {
-
-                    noteList.forEach {
-
-                        if (it.title.lowercase(Locale.getDefault()).contains(searchText)) {
-
-                            searchList.add(it)
-
-                        }
-                    }
-                } else {
-                    searchList.clear()
-                    searchList.addAll(noteList)
-
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    binding.notesRecyclerView.adapter!!.notifyDataSetChanged()
+                    return true
                 }
-                adapter.setFilterList(searchList)
-                return false
-            }
 
-        })
-
-        return super.onCreateOptionsMenu(menu)
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    searchList.clear()
+                    val searchText = newText!!.lowercase(Locale.getDefault())
+                    if (searchText.isNotEmpty()) {
+                        noteList.forEach {
+                            if (it.title.lowercase(Locale.getDefault()).contains(searchText)) {
+                                searchList.add(it)
+                            }
+                        }
+                    } else {
+                        searchList.clear()
+                        searchList.addAll(noteList)
+                    }
+                    adapter.setFilterList(searchList)
+                    return false
+                }
+            })
+        }
+        return true
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -186,18 +188,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        super.onBackPressed()
+        if (isMultiSelectMode) {
+            adapter.clearSelection()
+            isMultiSelectMode = false
+            invalidateOptionsMenu() // Update the action bar
+        } else {
+            super.onBackPressed()
+        }
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressedDispatcher.onBackPressed()
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.select -> {
-                adapter.selectAll()
+                //adapter.selectAll()
                 true
             }
 
@@ -210,12 +216,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.export -> {
-
                 true
             }
 
             R.id.sort -> {
                 sortFilter()
+                true
+            }
+
+            R.id.select_all -> {
+                adapter.toggleSelectAll()
                 true
             }
 
