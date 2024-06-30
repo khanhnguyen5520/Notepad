@@ -1,4 +1,4 @@
-package com.example.notepad
+package com.example.notepad.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.notepad.R
 import com.example.notepad.model.HelpItem
 
 class HelpItemAdapter(private val parentItemList: List<HelpItem>) :

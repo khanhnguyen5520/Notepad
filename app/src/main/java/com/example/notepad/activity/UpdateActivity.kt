@@ -29,11 +29,13 @@ import android.widget.PopupWindow
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.widget.doOnTextChanged
 import com.example.notepad.DAO.NotesDatabaseHelper
 import com.example.notepad.R
+import com.example.notepad.TrashRepository
 import com.example.notepad.databinding.ActivityUpdateBinding
 import com.example.notepad.model.Note
 import com.skydoves.colorpickerview.ColorEnvelope
@@ -90,8 +92,6 @@ class UpdateActivity : AppCompatActivity() {
         note = db.getNoteByID(noteId)
         binding.edtUpdateTitle.setText(note.title)
         binding.edtUpdateContent.setText(note.content)
-
-
 
         binding.UpdateNote.setBackgroundColor(Color.parseColor(note.color))
 
@@ -324,6 +324,7 @@ class UpdateActivity : AppCompatActivity() {
         return true
     }
 
+    @RequiresApi(35)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.redo -> {
@@ -363,7 +364,8 @@ class UpdateActivity : AppCompatActivity() {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("The '${binding.edtUpdateTitle.text}' note will be deleted, Are you sure?")
                     .setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                        deleteList.add(note)
+
+                        TrashRepository.trashedNotes.add(note)
                         db.deleteNoteByID(noteId)
                         finish()
                         Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show()

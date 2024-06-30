@@ -22,7 +22,7 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/notesRecyclerView"
+            android:id="@+id/recyclerViewTrash"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/graylight" />

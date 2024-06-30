@@ -25,7 +25,8 @@ class NotesDatabaseHelper(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createQuery =
-            "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_TITLE TEXT, $COLUMN_CONTENT TEXT, $COLUMN_CREDATE TEXT, $COLUMN_EDITDATE TEXT, $COLUMN_COLOR TEXT, $COLUMN_SIZE INTEGER)"
+            "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_TITLE TEXT, $COLUMN_CONTENT TEXT" +
+                    ", $COLUMN_CREDATE TEXT, $COLUMN_EDITDATE TEXT, $COLUMN_COLOR TEXT, $COLUMN_SIZE INTEGER)"
         db?.execSQL(createQuery)
     }
 

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.notepad.HelpItemAdapter
+import com.example.notepad.adapter.HelpItemAdapter
 import com.example.notepad.databinding.ActivityHelpBinding
 import com.example.notepad.model.HelpItem
 
@@ -54,7 +54,6 @@ class HelpActivity : AppCompatActivity() {
         parentList.add(HelpItem(4,"My notes are lost. How can I recover them?",childItem4))
         val childItem5 = "Con5"
         parentList.add(HelpItem(5,"How can I transfer notes to a new device?",childItem5))
-
     }
 
 }

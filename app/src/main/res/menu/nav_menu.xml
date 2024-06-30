@@ -13,7 +13,7 @@
     <item android:title="Categories">
         <menu>
             <item
-                android:id="@+id/nav_edit"
+                android:id="@+id/nav_category"
                 android:icon="@drawable/baseline_edit_24"
                 android:title="Edit Categories" />
         </menu>

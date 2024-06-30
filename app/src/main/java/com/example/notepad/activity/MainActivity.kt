@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -15,7 +16,6 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.RadioButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -23,9 +23,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notepad.DAO.NotesDatabaseHelper
-import com.example.notepad.NotesAdapter
 import com.example.notepad.R
+import com.example.notepad.adapter.NotesAdapter
 import com.example.notepad.databinding.ActivityMainBinding
+import com.example.notepad.model.Category
 import com.example.notepad.model.Note
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
@@ -48,6 +49,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var adapter: NotesAdapter
     private var noteList = ArrayList<Note>()
     private var searchList = ArrayList<Note>()
+    private var categories = mutableListOf<Category>() // List to store categories
+
+    companion object {
+        const val CREATE_CATEGORY_REQUEST = 1
+        const val EXTRA_CATEGORY_NAME = "extra_category_name"
+        const val REQUEST_CODE_TRASH = 2
+    }
+
 
     private var isMultiSelectMode = false
 
@@ -94,7 +103,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //chạy quảng cáo
         ads()
+        updateNavigationView()
     }
+
 
     private fun getData() {
         noteList = db.getAllNote()
@@ -146,8 +157,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         return when (item.itemId) {
 
-            R.id.nav_edit -> {
-                Toast.makeText(this, "Edit", Toast.LENGTH_SHORT).show()
+            R.id.nav_category -> {
+                val intent = Intent(this, CategoryActivity::class.java)
+                startActivityForResult(intent, CREATE_CATEGORY_REQUEST)
                 true
             }
 
@@ -157,7 +169,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.nav_trash -> {
-                startActivity(Intent(this, TrashActivity::class.java))
+                val intent = Intent(this, TrashActivity::class.java)
+                startActivityForResult(intent, REQUEST_CODE_TRASH)
                 true
             }
 
@@ -185,6 +198,42 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CREATE_CATEGORY_REQUEST && resultCode == Activity.RESULT_OK) {
+            val categoryName = data?.getStringExtra(EXTRA_CATEGORY_NAME)
+            if (categoryName != null) {
+                categories.add(Category(categoryName))
+                updateNavigationView()
+            }
+        }
+
+        if (requestCode == REQUEST_CODE_TRASH && resultCode == Activity.RESULT_OK) {
+            val undeletedNote = data?.getSerializableExtra("undeleted_note") as? Note
+            undeletedNote?.let {
+                db.insertNote(it)
+                getData()
+                Log.e("undelete", "onActivityResult: received ${it.title}")
+                adapter.notifyDataSetChanged()
+            } ?: Log.e("undelete", "no note received ")
+        }
+    }
+
+
+    private fun updateNavigationView() {
+        val navigationView: NavigationView = findViewById(R.id.navigation_drawer)
+//        val menu = navigationView.menu
+//        menu.add(0, R.id.nav_category, 0, "Create New Category")
+//        CategoryRepository.categories.forEachIndexed { index, category ->
+//            menu.add(0, index, 0, category.name)
+//        }
+        val menu = navigationView.menu.findItem(0)?.subMenu
+        categories.forEach { category ->
+            navigationView.menu.add(category.name)
+        }
+    }
+
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
@@ -220,6 +269,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.sort -> {
+                getData()
                 sortFilter()
                 true
             }
