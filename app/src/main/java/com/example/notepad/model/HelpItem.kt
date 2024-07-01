@@ -1,12 +1,9 @@
 package com.example.notepad.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "helpItems")
 data class HelpItem(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val title : String,
-    val childItem : String,
-    var isExpandable : Boolean = false
+    @SerializedName("question") val question: String,
+    @SerializedName("answer") val answer: String,
+    var isExpanded: Boolean = false
 )

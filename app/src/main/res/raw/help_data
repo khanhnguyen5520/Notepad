@@ -1,0 +1,11 @@
+[
+    {
+        "question": "How to create a note?",
+        "answer": "To create a note, click on the 'Add' button and enter your note."
+    },
+    {
+        "question": "How to delete a note?",
+        "answer": "To delete a note, swipe left or right on the note."
+    }
+    // Add more help items here
+]

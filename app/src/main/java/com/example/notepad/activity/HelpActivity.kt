@@ -4,15 +4,19 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.notepad.adapter.HelpItemAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.example.notepad.R
+import com.example.notepad.adapter.HelpAdapter
 import com.example.notepad.databinding.ActivityHelpBinding
 import com.example.notepad.model.HelpItem
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.InputStreamReader
 
 
 class HelpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHelpBinding
-    private lateinit var parentList: ArrayList<HelpItem>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,13 +28,11 @@ class HelpActivity : AppCompatActivity() {
         setSupportActionBar(binding.tbHelp)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        val helpItems = loadHelpItems()
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        parentList = ArrayList()
 
-        prepareData()
-        val adapter = HelpItemAdapter(parentList)
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = HelpAdapter(helpItems)
 
     }
 
@@ -43,17 +45,11 @@ class HelpActivity : AppCompatActivity() {
         }
     }
 
-    private fun prepareData() {
-        val childItems1="Con1"
-        parentList.add(HelpItem(1,"Expand all answers", childItems1))
-        val childItem2 = "Con2"
-        parentList.add(HelpItem(2,"How can I use the app?",  childItem2))
-        val childItem3 = "Con3"
-        parentList.add(HelpItem(3,"Cursor is jumping to the start/end after the latest update. What happened?",childItem3))
-        val childItem4 = "Con4"
-        parentList.add(HelpItem(4,"My notes are lost. How can I recover them?",childItem4))
-        val childItem5 = "Con5"
-        parentList.add(HelpItem(5,"How can I transfer notes to a new device?",childItem5))
+    private fun loadHelpItems(): List<HelpItem> {
+        val inputStream = resources.openRawResource(R.raw.help_data)
+        val reader = InputStreamReader(inputStream)
+        val helpItemType = object : TypeToken<List<HelpItem>>() {}.type
+        return Gson().fromJson(reader, helpItemType)
     }
 
 }

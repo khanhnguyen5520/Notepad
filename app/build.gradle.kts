@@ -53,11 +53,13 @@ dependencies {
     implementation(libs.viewmodel)
     implementation(libs.compose.theme.adapter)
     implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.play.services.ads)
     implementation(libs.expandabletextview)
     implementation (libs.colorpickerview)
+    implementation("com.google.code.gson:gson:2.8.8")
 
 }

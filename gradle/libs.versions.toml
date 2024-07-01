@@ -19,6 +19,7 @@ lifecycleExtensions = "2.2.0"
 viewmodel = "1.1.1"
 composeThemeAdapter = "1.2.1"
 navigationFragmentKtx = "2.7.7"
+firebaseCrashlyticsBuildtools = "3.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,6 +40,7 @@ androidx-lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycl
 viewmodel = { group = "android.arch.lifecycle", name = "viewmodel", version.ref = "viewmodel" }
 compose-theme-adapter = { group = "com.google.android.material", name = "compose-theme-adapter", version.ref = "composeThemeAdapter" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
